@@ -97,9 +97,13 @@ def data_frame(filename, n):
     '''
     spark = init_spark()
     lines = spark.read.text(filename)
-    parts = lines.map(lambda row: row.split(","))
+    '''parts = lines.map(lambda row: row.split(","))'''
+    test_rate = parts.toDF().take(n)
+    final = toCSVLine(test_rate)
+    print(final)
     ratings =parts.toDF()
-    return toCSVLine(ratings)
+    final_op = toCSVLine(ratings)
+    return final_op
     '''return "not implemented"'''
 
 def frequent_itemsets(filename, n, s, c):
