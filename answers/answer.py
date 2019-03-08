@@ -9,6 +9,8 @@ from pyspark.rdd import RDD
 from pyspark.sql import Row
 from pyspark.sql import DataFrame
 from pyspark.sql import SparkSession
+from pyspark.ml.fpm import FPGrowth
+from pyspark.sql.functions import desc, size, max, abs
 
 '''
 INTRODUCTION
@@ -91,14 +93,13 @@ def data_frame(filename, n):
 
     Return value: a CSV string. Using function toCSVLine on the right 
                   DataFrame should return the correct answer.
-    Test file: tests/test_data_frame.py'''
+    Test file: tests/test_data_frame.py
+    '''
     spark = init_spark()
-    lines = spark.read.text(filename).rdd
-    parts = lines.map(lambda row: row.value.split(","))
-    ratings_rdd = parts.map(lambda p: Row(userId=int(p[0]), movieId=int(p[1]), rating=float(p[2])))
-    ratings = spark.createDataFrame(ratings_rdd)
-    final_op = toCSVLine(ratings.take(n))
-    return final_op
+    lines = spark.read.text(filename)
+    parts = lines.map(lambda row: row.split(","))
+    ratings =parts.toDF()
+    return toCSVLine(ratings)
     '''return "not implemented"'''
 
 def frequent_itemsets(filename, n, s, c):
