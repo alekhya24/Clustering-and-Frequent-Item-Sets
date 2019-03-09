@@ -96,12 +96,13 @@ def data_frame(filename, n):
     Test file: tests/test_data_frame.py
     '''
     spark = init_spark()
-    lines = spark.read.text(filename)
-    '''parts = lines.map(lambda row: row.split(","))'''
-    ratings =lines.zipWithIndex()
-    final_op = toCSVLine(ratings.take(n))
-    print(final_op)
-    return final_op
+    lines = spark.read.text(filename).rdd
+    parts= lines.map(lambda row: row.value.split(","))
+    ratingsRDD = parts.map(lambda p: Row(name=p[0], place=p[1]))
+    df = spark.createDataFrame(ratingsRDD)
+    for p in df.take(n):
+        print(p)
+    '''return final_op'''
     '''return "not implemented"'''
 
 def frequent_itemsets(filename, n, s, c):
