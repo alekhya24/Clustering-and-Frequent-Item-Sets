@@ -126,16 +126,9 @@ def frequent_itemsets(filename, n, s, c):
     df = spark.createDataFrame(rdd_data)
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
-
+    model_1 = model.orderBy(size("items"))
     # Display frequent itemsets.
-    model.freqItemsets.show()
-
-    # Display generated association rules.
-    model.associationRules.show()
-
-    # transform examines the input items against all the association rules and summarize the
-    # consequents as prediction
-    model.transform(df).show()
+    model_1.freqItemsets.show()
     '''return "not implemented"'''
 
 def association_rules(filename, n, s, c):
