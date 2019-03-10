@@ -127,8 +127,9 @@ def frequent_itemsets(filename, n, s, c):
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
     model_1 = model.freqItemsets.orderBy(size("items"),ascending=False)
-    model_1.show()
-    final_op = toCSVLine(model_1.limit(n))
+    model_2 = model_1.orderBy("freq",ascending=False)
+    model_2.show()
+    final_op = toCSVLine(model_2.limit(n))
     return final_op
     '''return "not implemented"'''
 
