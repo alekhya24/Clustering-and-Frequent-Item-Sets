@@ -124,7 +124,7 @@ def frequent_itemsets(filename, n, s, c):
     parts= lines.map(lambda row: row.value.split(","))
     rdd_data = parts.map(lambda p: Row(name=p[0], items=p[1:]))
     df = spark.createDataFrame(rdd_data)
-    fpGrowth = FPGrowth(itemsCol="items", minSupport=0.5, minConfidence=0.6)
+    fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
 
     # Display frequent itemsets.
