@@ -101,12 +101,10 @@ def data_frame(filename, n):
     parts= lines.map(lambda row: row.value.split(","))
     rdd_data = parts.map(lambda p: Row(name=p[0], place=p[1:]))
     df = spark.createDataFrame(rdd_data)
-    df_index = df.select("*").withColumn("id", monotonically_increasing_id())
-    df_final = df_index.select("id","name","place")
+    df_indexed = df.select("*").withColumn("id", monotonically_increasing_id())
+    df_final = df_indexed.select("id","name","place")
     op = toCSVLine(df_final.limit(n))
-    print(op)
     return op
-    '''return "not implemented"'''
 
 def frequent_itemsets(filename, n, s, c):
     '''
@@ -122,7 +120,25 @@ def frequent_itemsets(filename, n, s, c):
     Test: tests/test_frequent_items.py
     '''
     spark = init_spark()
-    return "not implemented"
+    lines = spark.read.text(filename).rdd
+    parts= lines.map(lambda row: row.value.split(","))
+    rdd_data = parts.map(lambda p: Row(name=p[0], place=p[1:]))
+    df = spark.createDataFrame(rdd_data)
+    df_indexed = df.select("*").withColumn("id", monotonically_increasing_id())
+    df_final = df_indexed.select("id","name","place")
+    fpGrowth = FPGrowth(itemsCol="place", minSupport=0.5, minConfidence=0.6)
+    model = fpGrowth.fit(df)
+
+    # Display frequent itemsets.
+    model.freqItemsets.show()
+
+    # Display generated association rules.
+    model.associationRules.show()
+
+    # transform examines the input items against all the association rules and summarize the
+    # consequents as prediction
+    model.transform(df).show()
+    '''return "not implemented"'''
 
 def association_rules(filename, n, s, c):
     '''
