@@ -11,6 +11,7 @@ from pyspark.sql import DataFrame
 from pyspark.sql import SparkSession
 from pyspark.ml.fpm import FPGrowth
 from pyspark.sql.functions import desc, size, max, abs
+from pyspark.sql.functions import monotonically_increasing_id 
 
 '''
 INTRODUCTION
@@ -99,11 +100,12 @@ def data_frame(filename, n):
     lines = spark.read.text(filename).rdd
     parts= lines.map(lambda row: row.value.split(","))
     rdd_data = parts.map(lambda p: Row(name=p[0], place=p[1:]))
-    index_data = rdd_data.zipWithIndex()
-    df = spark.createDataFrame(index_data)
-    for p in df.take(n):
-        print (p)
-    op = toCSVLine(df.take(n))
+    df = spark.createDataFrame(rdd_data)
+    n_df = df.take(n)
+    df_index = n_df.select("*").withColumn("id", monotonically_increasing_id())
+    for p in df_index:
+        print(p)
+    op = toCSVLine(df_index)
     print(op)
     return op
     '''return "not implemented"'''
