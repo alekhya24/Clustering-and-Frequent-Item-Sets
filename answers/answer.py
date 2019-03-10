@@ -98,7 +98,7 @@ def data_frame(filename, n):
     spark = init_spark()
     lines = spark.read.text(filename).rdd
     parts= lines.map(lambda row: row.value.split(","))
-    ratingsRDD = parts.map(lambda p: Row(name=p[0], place=p[1,]))
+    ratingsRDD = parts.map(lambda p: Row(name=p[0], place=p[1:]))
     df = spark.createDataFrame(ratingsRDD)
     for p in df.take(n):
         print(p)
