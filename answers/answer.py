@@ -127,7 +127,7 @@ def frequent_itemsets(filename, n, s, c):
     df_indexed = df.select("*").withColumn("id", monotonically_increasing_id())
     df_final = df_indexed.select("id","name","place")
     fpGrowth = FPGrowth(itemsCol="place", minSupport=0.5, minConfidence=0.6)
-    model = fpGrowth.fit(df)
+    model = fpGrowth.fit(df_final)
 
     # Display frequent itemsets.
     model.freqItemsets.show()
@@ -137,7 +137,7 @@ def frequent_itemsets(filename, n, s, c):
 
     # transform examines the input items against all the association rules and summarize the
     # consequents as prediction
-    model.transform(df).show()
+    model.transform(df_final).show()
     '''return "not implemented"'''
 
 def association_rules(filename, n, s, c):
