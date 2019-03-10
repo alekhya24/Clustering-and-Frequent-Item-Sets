@@ -101,11 +101,10 @@ def data_frame(filename, n):
     parts= lines.map(lambda row: row.value.split(","))
     rdd_data = parts.map(lambda p: Row(name=p[0], place=p[1:]))
     df = spark.createDataFrame(rdd_data)
-    n_df = df.take(n)
-    df_index = n_df.select("*").withColumn("id", monotonically_increasing_id())
-    for p in df_index:
+    df_index = df.select("*").withColumn("id", monotonically_increasing_id())
+    for p in df_index.take(n):
         print(p)
-    op = toCSVLine(df_index)
+    op = toCSVLine(df_index.take(n))
     print(op)
     return op
     '''return "not implemented"'''
