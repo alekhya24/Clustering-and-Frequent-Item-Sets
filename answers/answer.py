@@ -66,7 +66,7 @@ def toCSVLine(data):
             return toCSVLineRDD(data.rdd)
         else:
             return ""
-    return None
+    '''return None'''
 
 
 '''
@@ -101,6 +101,8 @@ def data_frame(filename, n):
     rdd_data = parts.map(lambda p: Row(name=p[0], place=p[1:]))
     index_data = rdd_data.zipWithIndex()
     df = spark.createDataFrame(index_data)
+    for p in df:
+        print (p)
     op = toCSVLine(df.take(n))
     print(op)
     return op
