@@ -67,7 +67,7 @@ def toCSVLine(data):
             return toCSVLineRDD(data.rdd)
         else:
             return ""
-    '''return None'''
+    return None
 
 
 '''
@@ -102,9 +102,8 @@ def data_frame(filename, n):
     rdd_data = parts.map(lambda p: Row(name=p[0], place=p[1:]))
     df = spark.createDataFrame(rdd_data)
     df_index = df.select("*").withColumn("id", monotonically_increasing_id())
-    for p in df_index.take(n):
-        print(p)
-    op = toCSVLine(df_index.limit(n))
+    df_final = df_index.select("id","name","place")
+    op = toCSVLine(df_final.limit(n))
     print(op)
     return op
     '''return "not implemented"'''
