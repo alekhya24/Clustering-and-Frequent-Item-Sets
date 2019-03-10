@@ -100,9 +100,10 @@ def data_frame(filename, n):
     parts= lines.map(lambda row: row.value.split(","))
     rdd_data = parts.map(lambda p: Row(name=p[0], place=p[1:]))
     index_data = rdd_data.zipWithIndex()
-    df = spark.createDataFrame(index_data)
-    for p in df:
+    for p in index_data:
         print (p)
+    df = spark.createDataFrame(index_data)
+
     op = toCSVLine(df.take(n))
     print(op)
     return op
