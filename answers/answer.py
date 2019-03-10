@@ -100,9 +100,9 @@ def data_frame(filename, n):
     parts= lines.map(lambda row: row.value.split(","))
     ratingsRDD = parts.map(lambda p: Row(name=p[0], place=p[1:]))
     df = spark.createDataFrame(ratingsRDD)
-    for p in df.take(n):
-        print(p)
-    '''return final_op'''
+    op = toCSVLine(df.take(n))
+    print(op)
+    return op
     '''return "not implemented"'''
 
 def frequent_itemsets(filename, n, s, c):
