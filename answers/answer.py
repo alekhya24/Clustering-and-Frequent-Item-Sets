@@ -127,8 +127,6 @@ def frequent_itemsets(filename, n, s, c):
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
     model_1 = model.freqItemsets.orderBy(size("items"))
-    # Display frequent itemsets.
-    model_1.freqItemsets.show()
     model_1.show()
     '''return "not implemented"'''
 
