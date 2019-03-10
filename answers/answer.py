@@ -98,8 +98,9 @@ def data_frame(filename, n):
     spark = init_spark()
     lines = spark.read.text(filename).rdd
     parts= lines.map(lambda row: row.value.split(","))
-    ratingsRDD = parts.map(lambda p: Row(name=p[0], place=p[1:]))
-    df = spark.createDataFrame(ratingsRDD)
+    rdd_data = parts.map(lambda p: Row(name=p[0], place=p[1:]))
+    index_data = rdd_data.zipWithIndex()
+    df = spark.createDataFrame(index_data)
     op = toCSVLine(df.take(n))
     print(op)
     return op
