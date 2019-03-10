@@ -104,7 +104,7 @@ def data_frame(filename, n):
     df_index = df.select("*").withColumn("id", monotonically_increasing_id())
     for p in df_index.take(n):
         print(p)
-    op = toCSVLine(df_index.take(n))
+    op = toCSVLine(df_index.limit(n))
     print(op)
     return op
     '''return "not implemented"'''
