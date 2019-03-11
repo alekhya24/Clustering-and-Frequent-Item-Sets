@@ -151,7 +151,9 @@ def association_rules(filename, n, s, c):
     model = fpGrowth.fit(df)
     model.associationRules.show()
     model_1 = model.associationRules.orderBy([size("antecedent"),"confidence"],ascending=[0,0])
-    final_op = toCSVLine(model_1.limit(n))
+    model_2 = model_1.drop(lift)
+    final_op = toCSVLine(model_2.limit(n))
+    print(final_op)
     return final_op
 
 def interests(filename, n, s, c):
