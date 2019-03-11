@@ -174,7 +174,7 @@ def interests(filename, n, s, c):
     df = spark.createDataFrame(rdd_data)
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
-    model_with_interest = model.associationRules.withColumn("interest",lit(calculate_interest("confidence",size("consequent"))))
+    model_with_interest = model.associationRules.withColumn("interest",lit(calculate_interest(model.associationRules.confidence,size(model.associationRules.consequent))))
     model_with_interest.show()
     return " not implemented"
 
