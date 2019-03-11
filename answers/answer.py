@@ -150,7 +150,9 @@ def association_rules(filename, n, s, c):
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
     model.associationRules.show()
-    return " not implemented"
+    model_1 = model.associationRules.orderBy([size("antecedent"),"confidence"],ascending=[0,0])
+    final_op = toCSVLine(model_1.limit(n))
+    return final_op
 
 def interests(filename, n, s, c):
     '''
