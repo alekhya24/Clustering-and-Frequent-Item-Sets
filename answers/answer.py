@@ -176,7 +176,9 @@ def interests(filename, n, s, c):
     model = fpGrowth.fit(df)
     model_with_interest = model.associationRules.withColumn("interest",lit(calculate_interest(model.associationRules.confidence,size(model.associationRules.consequent))))
     model_with_interest.show()
-    return " not implemented"
+    model_1 = model_with_interest.orderBy([size("antecedent"),"interest"],ascending=[0,0])
+    final_op = toCSVLine(model_1.limit(n))
+    return final_op
 
 
 def calculate_interest(confidence,frequency):
