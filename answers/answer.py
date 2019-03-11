@@ -129,6 +129,9 @@ def frequent_itemsets(filename, n, s, c):
     model_1 = model.freqItemsets.orderBy([size("items"),"freq"],ascending=[0],descending=[1])
     model_1.show()
     model_1.limit(n).show()
+    model_2 = model.freqItemsets.sort([size("items"),"freq"],ascending=[0],descending=[1])
+    model_2.show()
+    model_2.limit(n).show()
     final_op = toCSVLine(model_1.limit(n))
     print(final_op)
     return final_op
