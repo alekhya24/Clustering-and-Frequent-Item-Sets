@@ -126,7 +126,7 @@ def frequent_itemsets(filename, n, s, c):
     df = spark.createDataFrame(rdd_data)
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
-    model_1 = model.freqItemsets.orderBy(desc(size("items")),"freq")
+    model_1 = model.freqItemsets.orderBy([size("items"),"freq"])
     model_1.show()
     final_op = toCSVLine(model_1.limit(n))
     return final_op
