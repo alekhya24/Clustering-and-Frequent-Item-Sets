@@ -129,6 +129,7 @@ def frequent_itemsets(filename, n, s, c):
     model_1 = model.freqItemsets.orderBy([size("items"),"freq"], ascending=[0, 1])
     model_1.show()
     final_op = toCSVLine(model_1.limit(n))
+    final_op.show()
     return final_op
     '''return "not implemented"'''
 
