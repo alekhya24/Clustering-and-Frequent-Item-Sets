@@ -126,11 +126,10 @@ def frequent_itemsets(filename, n, s, c):
     df = spark.createDataFrame(rdd_data)
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
-    model_1 = model.freqItemsets.orderBy([size("items")],ascending=[0])
-    model_2 = model_1.orderBy(["freq"], ascending=[0])
+    model_1 = model.freqItemsets.orderBy([size("items"),"freq"],ascending=[0,1])
     model_1.show()
-    model_2.show()
-    final_op = toCSVLine(model_2.limit(n))
+    model_1.limit(n).show()
+    final_op = toCSVLine(model_1.limit(n))
     print(final_op)
     return final_op
     '''return "not implemented"'''
