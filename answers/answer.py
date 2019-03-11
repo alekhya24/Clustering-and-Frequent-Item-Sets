@@ -11,7 +11,8 @@ from pyspark.sql import DataFrame
 from pyspark.sql import SparkSession
 from pyspark.ml.fpm import FPGrowth
 from pyspark.sql.functions import desc, size, max, abs
-from pyspark.sql.functions import monotonically_increasing_id 
+from pyspark.sql.functions import monotonically_increasing_id
+from pyspark.sql.functions import lit
 
 '''
 INTRODUCTION
