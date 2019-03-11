@@ -127,10 +127,7 @@ def frequent_itemsets(filename, n, s, c):
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
     model_1 = model.freqItemsets.orderBy([size("items"),"freq"],ascending=[0,0])
-    model_1.show()
-    model_1.limit(n).show()
     final_op = toCSVLine(model_1.limit(n))
-    print(final_op)
     return final_op
     '''return "not implemented"'''
 
@@ -146,6 +143,13 @@ def association_rules(filename, n, s, c):
     Test: tests/test_association_rules.py
     '''
     spark = init_spark()
+    lines = spark.read.text(filename).rdd
+    parts= lines.map(lambda row: row.value.split(","))
+    rdd_data = parts.map(lambda p: Row(name=p[0], items=p[1:]))
+    df = spark.createDataFrame(rdd_data)
+    fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
+    model = fpGrowth.fit(df)
+    model.associationRules.show()
     return " not implemented"
 
 def interests(filename, n, s, c):
