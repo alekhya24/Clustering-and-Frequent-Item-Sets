@@ -175,7 +175,7 @@ def interests(filename, n, s, c):
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
     model.transform(df).show()
-    model_with_interest = model.associationRules.withColumn("interest",lit(calculate_interest(model.associationRules.confidence,size(model.associationRules.consequent))))
+    model_with_interest = model.associationRules.withColumn("interest",lit(calculate_interest(model.associationRules.confidence,model.associationRules.consequent.count())))
     model_with_interest.show()
     model_1 = model_with_interest.drop("lift")
     model_2 = model_1.orderBy([size("antecedent"),"interest"],ascending=[0,0])
