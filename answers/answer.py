@@ -149,11 +149,9 @@ def association_rules(filename, n, s, c):
     df = spark.createDataFrame(rdd_data)
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
-    model.associationRules.show()
     model_1 = model.associationRules.orderBy([size("antecedent"),"confidence"],ascending=[0,0])
     model_2 = model_1.drop("lift")
     final_op = toCSVLine(model_2.limit(n))
-    print(final_op)
     return final_op
 
 def interests(filename, n, s, c):
@@ -169,8 +167,20 @@ def interests(filename, n, s, c):
     Test: tests/test_interests.py
     '''
     spark = init_spark()
+    lines = spark.read.text(filename).rdd
+    parts= lines.map(lambda row: row.value.split(","))
+    rdd_data = parts.map(lambda p: Row(name=p[0], items=p[1:]))
+    df = spark.createDataFrame(rdd_data)
+    fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
+    model = fpGrowth.fit(df)
+    model_with_interest = model.associationRules.withColumn("interest",lit(calculate_interest("confidence",size("consequent"))))
+    model_with_interest.show()
     return " not implemented"
 
+
+def calculate_interest(confidence,frequency):
+    interest = |confidence - frequency|
+    return interest
 '''
 PART 2: CLUSTERING
 
