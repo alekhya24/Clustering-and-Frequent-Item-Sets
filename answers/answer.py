@@ -184,9 +184,7 @@ def interests(filename, n, s, c):
 
 
 def calculate_interest(confidence,frequency):
-    print("confidence:{0}".format(confidence))
-    print("frequency:{0}".format(frequency))
-    interest = confidence - frequency
+    interest = abs(confidence - frequency)
     return interest
 '''
 PART 2: CLUSTERING
