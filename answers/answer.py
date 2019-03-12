@@ -10,6 +10,7 @@ from pyspark.sql import Row
 from pyspark.sql import DataFrame
 from pyspark.sql import SparkSession
 from pyspark.ml.fpm import FPGrowth
+from pyspark.ml.fpm import PrefixSpan
 from pyspark.sql.functions import desc, size, max, abs
 from pyspark.sql.functions import monotonically_increasing_id
 from pyspark.sql.functions import lit
@@ -174,9 +175,8 @@ def interests(filename, n, s, c):
     df = spark.createDataFrame(rdd_data)
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
-    dt =model.associationRules.groupBy(model.associationRules.consequent).count()
-    dt.show()
-    model.associationRules.cube(model.associationRules.consequent).count().show()
+    prefixSpan = PrefixSpan(minSupport=s, maxPatternLength=50)
+    prefixSpan.findFrequentSequentialPatterns(df).sort("consequent").show(truncate=False)
     model_with_interest = model.associationRules.withColumn("interest",lit(calculate_interest(model.associationRules.confidence,1)))
     model_with_interest.show()
     model_1 = model_with_interest
