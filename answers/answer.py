@@ -176,6 +176,7 @@ def interests(filename, n, s, c):
     model = fpGrowth.fit(df)
     dt =model.associationRules.groupBy(model.associationRules.consequent).count()
     dt.show()
+    model.associationRules.cube(model.associationRules.consequent).count().show()
     model_with_interest = model.associationRules.withColumn("interest",lit(calculate_interest(model.associationRules.confidence,1)))
     model_with_interest.show()
     model_1 = model_with_interest
