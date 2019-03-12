@@ -176,7 +176,7 @@ def interests(filename, n, s, c):
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
     prefixSpan = PrefixSpan(minSupport=s, maxPatternLength=50)
-    prefixSpan.findFrequentSequentialPatterns(df).sort("consequent").show(truncate=False)
+    prefixSpan.findFrequentSequentialPatterns(model.associationRules).sort("consequent").show(truncate=False)
     model_with_interest = model.associationRules.withColumn("interest",lit(calculate_interest(model.associationRules.confidence,1)))
     model_with_interest.show()
     model_1 = model_with_interest
