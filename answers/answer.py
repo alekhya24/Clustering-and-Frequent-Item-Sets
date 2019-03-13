@@ -173,13 +173,13 @@ def interests(filename, n, s, c):
     parts= lines.map(lambda row: row.value.split(","))
     rdd_data = parts.map(lambda p: Row(name=p[0], items=p[1:]))
     df = spark.createDataFrame(rdd_data)
+    total_count = df.count()
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
     model_updated = model.associationRules.join(model.freqItemsets,model.associationRules['consequent']==model.freqItemsets['items'])
     model_updated.show()
-    model_with_interest = model_updated.withColumn("interest",lit(calculate_interest(model_updated.confidence,model_updated.freq)))
-    model_1 = model_with_interest
-    '''.drop("lift")'''
+    model_with_interest = model_updated.withColumn("interest",lit(calculate_interest(model_updated.confidence,model_updated.freq,total_count)))
+    model_1 = model_with_interest.drop("lift")
     model_2 = model_1.orderBy([size("antecedent"),"interest"],ascending=[0,0])
     model_2.show()
     final_op = toCSVLine(model_2.limit(n))
@@ -187,7 +187,7 @@ def interests(filename, n, s, c):
 
 
 def calculate_interest(confidence,frequency):
-    interest = abs(confidence - frequency)
+    interest = abs(confidence - (frequency/total_count))
     return interest
 '''
 PART 2: CLUSTERING
