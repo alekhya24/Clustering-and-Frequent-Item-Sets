@@ -238,10 +238,10 @@ def data_preparation(filename, plant, state):
         for name in plant_names:
             dict[name[0]]=1
         tuple=(state,dict)
-        row = Row(tuple)
-        print(row)
         tuple_list.append(tuple)
-    print(rdd)
+    rdd = tuple_list.map(lambda p: Row(state=p[0], plants=p[1:]))
+    data_f = spark.createDataFrame(rdd)
+    data_f.show()
     return False
 
 def distance2(filename, state1, state2):
