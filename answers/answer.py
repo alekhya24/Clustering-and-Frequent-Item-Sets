@@ -174,8 +174,10 @@ def interests(filename, n, s, c):
     df = spark.createDataFrame(rdd_data)
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
-    fpGrowth1 = FPGrowth(itemsCol="consequent", minSupport=s, minConfidence=c)
-    model2 = fpGrowth1.fit(model.associationRules)
+    test_model = model.associationRules
+    test_model_updated = test_model..withColumnRenamed("consequent","items")
+    fpGrowth1 = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
+    model2 = fpGrowth1.fit(test_model_updated)
     model2.freqItemsets.show()
     model_with_interest = model.associationRules.withColumn("interest",lit(calculate_interest(model.associationRules.confidence,1)))
     model_1 = model_with_interest.drop("lift")
