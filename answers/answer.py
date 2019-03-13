@@ -174,11 +174,12 @@ def interests(filename, n, s, c):
     df = spark.createDataFrame(rdd_data)
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
+    fpGrowth1 = FPGrowth(itemsCol="consequent", minSupport=s, minConfidence=c)
+    model2 = fpGrowth1.fit(model.associationRules)
+    model2.freqItemsets.show()
     model_with_interest = model.associationRules.withColumn("interest",lit(calculate_interest(model.associationRules.confidence,1)))
-    model_with_interest.show()
     model_1 = model_with_interest.drop("lift")
     model_2 = model_1.orderBy([size("antecedent"),"interest"],ascending=[0,0])
-    model_2.show()
     final_op = toCSVLine(model_2.limit(n))
     return final_op
 
