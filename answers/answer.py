@@ -183,8 +183,9 @@ def interests(filename, n, s, c):
 
 def calculate_interest(confidence,consequent,itemset):
     itemset.show()
-    frequency = itemset.filter(itemset.items == consequent).select(itemset.freq)
-    print(frequency)
+    '''frequency = itemset.filter(itemset.items == consequent).select(itemset.freq)'''
+    frequency =1
+    print(1)
     interest = abs(confidence - frequency)
     return interest
 '''
