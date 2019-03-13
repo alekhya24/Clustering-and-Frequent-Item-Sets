@@ -243,9 +243,10 @@ def data_preparation(filename, plant, state):
         tuple_list.append(tuple_data)
     rdd = sc.parallelize(tuple_list[1:])
     data_f = spark.createDataFrame(rdd)
-    final_op = data_f.select(data_f._2).where(data_f._1 == state)
-    print(final_op)
-    return False
+    final_op = data_f.select(data_f._2).where(data_f._1 == state).collect()[0]
+    op = final_op.has_key(plant)?True:False
+    print(op)
+    return op
 
 def distance2(filename, state1, state2):
     '''
