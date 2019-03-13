@@ -186,7 +186,7 @@ def interests(filename, n, s, c):
     return final_op
 
 
-def calculate_interest(confidence,frequency):
+def calculate_interest(confidence,frequency,total_count):
     interest = abs(confidence - (frequency/total_count))
     return interest
 '''
