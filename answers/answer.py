@@ -234,12 +234,12 @@ def data_preparation(filename, plant, state):
     df = spark.createDataFrame(rdd_data)
     states_data = all_states.all_states
     tuple_list = [()]
-    for state in states_data:
+    for state_name in states_data:
         dict={}
-        plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).collect()
+        plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
         for name in plant_names:
             dict[name[0]]=1
-        tuple_data=(state,dict)
+        tuple_data=(state_name,dict)
         tuple_list.append(tuple_data)
     rdd = sc.parallelize(tuple_list[1:])
     data_f = spark.createDataFrame(rdd)
