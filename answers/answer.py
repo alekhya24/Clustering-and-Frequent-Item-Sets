@@ -243,7 +243,6 @@ def data_preparation(filename, plant, state):
         tuple_list.append(tuple_data)
     rdd = sc.parallelize(tuple_list[1:])
     data_f = spark.createDataFrame(rdd)
-    print(state,plant)
     dict_op = data_f.select(data_f._2).where(data_f._1 == state).collect()
     row = Row(**dict_op[0][0])
     if  plant in row.asDict().keys():
@@ -259,7 +258,9 @@ def distance2(filename, state1, state2):
     Return value: an integer.
     Test: tests/test_distance.py
     '''
-    return 42
+    points = zip(state1, state2)
+    diffs_squared_distance = [pow(a - b, 2) for (a, b) in points]
+    return math.sqrt(sum(diffs_squared_distance))
 
 def init_centroids(k, seed):
     '''
