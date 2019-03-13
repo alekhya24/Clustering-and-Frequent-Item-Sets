@@ -15,6 +15,7 @@ from pyspark.sql.functions import monotonically_increasing_id
 from pyspark.sql.functions import lit
 from pyspark.sql.functions import array_contains,array
 
+
 '''
 INTRODUCTION
 
@@ -177,11 +178,9 @@ def interests(filename, n, s, c):
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
     model_updated = model.associationRules.join(model.freqItemsets,model.associationRules['consequent']==model.freqItemsets['items'])
-    model_updated.show()
     model_with_interest = model_updated.withColumn("interest",lit(calculate_interest(model_updated.confidence,model_updated.freq,total_count)))
     model_1 = model_with_interest.drop("lift")
     model_2 = model_1.orderBy([size("antecedent"),"interest"],ascending=[0,0])
-    model_2.show()
     final_op = toCSVLine(model_2.limit(n))
     return final_op
 
@@ -226,6 +225,12 @@ def data_preparation(filename, plant, state):
     Test: tests/test_data_preparation.py
     '''
     spark = init_spark()
+    lines = spark.read.text(filename).rdd
+    parts= lines.map(lambda row: row.value.split(","))
+    rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
+    df = spark.createDataFrame(rdd_data)
+    data = all_states
+    print(data)
     return False
 
 def distance2(filename, state1, state2):
