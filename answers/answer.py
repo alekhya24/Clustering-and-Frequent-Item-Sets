@@ -234,7 +234,7 @@ def data_preparation(filename, plant, state):
     tuple_list = [()]
     for value in data:
         dict={}
-        name = rdd_data.where(lambda x: x.states.contains(value)).select(rdd_data.plant_name)
+        name = df.where(lambda x: x.states.contains(value)).select(df.plant_name)
         tuple_list.append(value,name)
     print(tuple_list)
     return False
