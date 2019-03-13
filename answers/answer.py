@@ -15,6 +15,8 @@ from pyspark.sql.functions import desc, size, max, abs
 from pyspark.sql.functions import monotonically_increasing_id
 from pyspark.sql.functions import lit
 from pyspark.sql.functions import array_contains,array
+from pyspark import SparkContext
+sc = SparkContext()
 
 
 '''
@@ -237,9 +239,9 @@ def data_preparation(filename, plant, state):
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).collect()
         for name in plant_names:
             dict[name[0]]=1
-        tuple=(state,dict)
-        tuple_list.append(tuple)
-    rdd = tuple_list.map(lambda p: Row(state=p[0], plants=p[1:]))
+        tuple_data=(state,dict)
+        tuple_list.append(tuple_data)
+    rdd = sc.parallelize(tuple_list)
     data_f = spark.createDataFrame(rdd)
     data_f.show()
     return False
