@@ -245,7 +245,7 @@ def data_preparation(filename, plant, state):
     data_f = spark.createDataFrame(rdd)
     final_op = data_f.select(data_f._2).where(data_f._1 == state).collect()
     row = final_op[0]
-    for item in row.asDict():
+    for item in row.asDict().values():
         print(item)
     '''if  plant in final_op[0].asDict().keys():
         return True
