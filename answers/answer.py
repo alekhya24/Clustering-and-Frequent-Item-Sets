@@ -180,6 +180,7 @@ def interests(filename, n, s, c):
     model_with_interest = model_updated.withColumn("interest",lit(calculate_interest(model_updated.confidence,model_updated.freq)))
     model_1 = model_with_interest.drop("lift")
     model_2 = model_1.orderBy([size("antecedent"),"interest"],ascending=[0,0])
+    model_2.show()
     final_op = toCSVLine(model_2.limit(n))
     return final_op
 
