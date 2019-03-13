@@ -4,6 +4,7 @@ import copy
 import time
 import random
 import pyspark
+import all_states
 from statistics import mean
 from pyspark.rdd import RDD
 from pyspark.sql import Row
@@ -229,7 +230,7 @@ def data_preparation(filename, plant, state):
     parts= lines.map(lambda row: row.value.split(","))
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
     df = spark.createDataFrame(rdd_data)
-    data = all_states
+    data = all_states.all_states
     print(data)
     return False
 
