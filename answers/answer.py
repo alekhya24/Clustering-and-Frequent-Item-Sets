@@ -239,7 +239,8 @@ def data_preparation(filename, plant, state):
             dict[name[0]]=1
         tuple=(state,dict)
         tuple_list.append(tuple)
-    print(tuple_list)
+    rdd = sc.makeRDD(tuple_list)
+    print(rdd)
     return False
 
 def distance2(filename, state1, state2):
