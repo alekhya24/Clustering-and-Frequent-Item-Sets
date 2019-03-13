@@ -174,7 +174,9 @@ def interests(filename, n, s, c):
     rdd_data = parts.map(lambda p: Row(name=p[0], items=p[1:]))
     df = spark.createDataFrame(rdd_data)
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
-    model = fpGrowth.fit(df)    
+    model = fpGrowth.fit(df)
+    model_updated = model.associationRules.join(model.freqItemsets,model.associationRules['consequent']==model.freqItemsets['items'])
+    model_updated.show()
     model_with_interest = model.associationRules.withColumn("interest",lit(calculate_interest(model.associationRules.confidence,model.associationRules.consequent ,model.freqItemsets)))
     model_1 = model_with_interest.drop("lift")
     model_2 = model_1.orderBy([size("antecedent"),"interest"],ascending=[0,0])
@@ -184,10 +186,7 @@ def interests(filename, n, s, c):
 
 def calculate_interest(confidence,consequent,itemset):
     itemset.show()
-    for p in consequent.collect():
-        print(p)
-    frequency = itemset.where(array_contains(itemset.items,consequent.collect())).select(itemset.freq)
-    print(frequency)
+    print(1)
     interest = abs(confidence - frequency)
     return interest
 '''
