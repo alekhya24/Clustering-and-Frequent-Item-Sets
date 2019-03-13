@@ -231,7 +231,7 @@ def data_preparation(filename, plant, state):
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
     df = spark.createDataFrame(rdd_data)
     states_data = all_states.all_states
-    plant_names = df.plant_name.collect()
+    plant_names = df.select("plant_name").collect()
     print(plant_names)
     tuple_list = [()]
     for state in states_data:
