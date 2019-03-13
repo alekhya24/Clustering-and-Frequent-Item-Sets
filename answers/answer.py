@@ -13,6 +13,7 @@ from pyspark.ml.fpm import FPGrowth
 from pyspark.sql.functions import desc, size, max, abs
 from pyspark.sql.functions import monotonically_increasing_id
 from pyspark.sql.functions import lit
+from pyspark.sql.functions import array_contains,array
 
 '''
 INTRODUCTION
@@ -183,6 +184,8 @@ def interests(filename, n, s, c):
 
 def calculate_interest(confidence,consequent,itemset):
     itemset.show()
+    frequency1= itemset.where(itemset.items == array(*[lit(x) for x in consequent])).select(itemset.freq)
+    print(frequency1)
     frequency = itemset.where(array_contains(itemset.items,consequent)).select(itemset.freq)
     print(frequency)
     interest = abs(confidence - frequency)
