@@ -230,12 +230,14 @@ def data_preparation(filename, plant, state):
     parts= lines.map(lambda row: row.value.split(","))
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
     df = spark.createDataFrame(rdd_data)
-    data = all_states.all_states
+    states_data = all_states.all_states
+    plant_names = df.plant_name.collect()
+    print(plant_names)
     tuple_list = [()]
-    for value in data:
+    for state in states_data:
         dict={}
-        name = df.where(array_contains(df.states,value)).select(df.plant_name)
-        tuple=(value,name)
+        plant_state = df.where(array_contains(df.states,state)).select(df.plant_name).collect();
+        tuple=(state,plant_state)
         tuple_list.append(tuple)
     print(tuple_list)
     return False
