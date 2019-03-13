@@ -243,8 +243,9 @@ def data_preparation(filename, plant, state):
         tuple_list.append(tuple_data)
     rdd = sc.parallelize(tuple_list[1:])
     data_f = spark.createDataFrame(rdd)
-    final_op = data_f.select(data_f._2).where(data_f._1 == state).collect()[0]
-    if final_op.has_key(plant):
+    final_op = data_f.select(data_f._2).where(data_f._1 == state).collect()
+    print(final_op[0])
+    if final_op[0].has_key(plant):
         return True
     else:
         return False
