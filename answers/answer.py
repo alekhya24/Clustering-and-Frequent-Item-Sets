@@ -231,7 +231,12 @@ def data_preparation(filename, plant, state):
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
     df = spark.createDataFrame(rdd_data)
     data = all_states.all_states
-    print(data)
+    tuple_list = [()]
+    for value in data:
+        dict={}
+        name = rdd_data.where(lambda x: x.states.contains(value)).select(rdd_data.plant_name)
+        tuple_list.append(value,name)
+    print(tuple_list)
     return False
 
 def distance2(filename, state1, state2):
