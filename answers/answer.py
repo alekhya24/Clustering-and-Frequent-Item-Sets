@@ -238,8 +238,9 @@ def data_preparation(filename, plant, state):
         for name in plant_names:
             dict[name[0]]=1
         tuple=(state,dict)
+        row = Row(tuple)
+        print(row)
         tuple_list.append(tuple)
-    rdd = sc.makeRDD(tuple_list)
     print(rdd)
     return False
 
