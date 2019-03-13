@@ -234,7 +234,7 @@ def data_preparation(filename, plant, state):
     tuple_list = [()]
     for state in states_data:
         dict={}
-        plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).collect()
+        plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).collect()[0][1]
         for name in plant_names:
             dict[name]=1
         tuple=(state,dict)
