@@ -185,7 +185,6 @@ def interests(filename, n, s, c):
 
 
 def calculate_interest(confidence,frequency):
-    itemset.show()
     interest = abs(confidence - frequency)
     return interest
 '''
