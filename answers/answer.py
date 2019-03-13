@@ -175,7 +175,7 @@ def interests(filename, n, s, c):
     fpGrowth = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model = fpGrowth.fit(df)
     test_model = model.associationRules
-    test_model_updated = test_model..withColumnRenamed("consequent","items")
+    test_model_updated = test_model.withColumnRenamed("consequent","items")
     fpGrowth1 = FPGrowth(itemsCol="items", minSupport=s, minConfidence=c)
     model2 = fpGrowth1.fit(test_model_updated)
     model2.freqItemsets.show()
