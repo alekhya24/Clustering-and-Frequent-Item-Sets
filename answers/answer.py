@@ -270,7 +270,7 @@ def distance2(filename, state1, state2):
     tuple_list = [()]
     '''for state_name in states_data:
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
-        '''dict1= dict( [ (plant_names[i],1) for i in range(len(plant_names)) ] )'''
+        dict1= dict( [ (plant_names[i],1) for i in range(len(plant_names)) ] )
         dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants ] )
         tuple_data=(state_name,dict1)
         tuple_list.append(tuple_data)'''
