@@ -235,10 +235,11 @@ def data_preparation(filename, plant, state):
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
     df = spark.createDataFrame(rdd_data)
     states_data = all_states.all_states
+    all_plants = df.select(df.plant_name)rdd.flatMap(lambda x: x).collect()
     tuple_list = [()]
     for state_name in states_data:
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
-        dict1= dict( [ (plant_names[i][0],1) for i in range(len(plant_names)) ] )
+        dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants)) ] )
         tuple_data=(state_name,dict1)
         tuple_list.append(tuple_data)
     rdd = sc.parallelize(tuple_list[1:])
@@ -267,12 +268,16 @@ def distance2(filename, state1, state2):
     tuple_list = [()]
     for state_name in states_data:
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
-        dict1= dict( [ (plant_names[i],1) for i in range(len(plant_names)) ] )
+        '''dict1= dict( [ (plant_names[i],1) for i in range(len(plant_names)) ] )'''
+        dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants)) ] )
         tuple_data=(state_name,dict1)
         tuple_list.append(tuple_data)
     rdd = sc.parallelize(tuple_list[1:])
     data_f = spark.createDataFrame(rdd)
-
+    dict_op1 = data_f.select(data_f._2).where(data_f._1 == state1).collect()
+    dict_op2 = data_f.select(data_f._2).where(data_f._1 == state2).collect()
+    list1 = list(dict_op1[0][0].values)
+    list2 = list(dict_op2[0][0].values)
     points = zip(list1, list2)
     diffs_squared_distance = [pow(a - b, 2) for (a, b) in points]
     return math.sqrt(sum(diffs_squared_distance))
