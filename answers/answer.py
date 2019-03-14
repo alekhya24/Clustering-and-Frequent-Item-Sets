@@ -283,7 +283,8 @@ def distance2(filename, state1, state2):
     vectorizer = VectorAssembler()
     vectorizer.setInputCols(None)
     vectorizer.setOutputCol("features")
-    display(vectorizer.transform(data_f))
+    op=vectorizer.transform(data_f)
+    print(op)
     points = zip(list1, list2)
     diffs_squared_distance = [pow(a - b, 2) for (a, b) in points]
     return math.sqrt(sum(diffs_squared_distance))
