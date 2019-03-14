@@ -15,6 +15,7 @@ from pyspark.sql.functions import desc, size, max, abs
 from pyspark.sql.functions import monotonically_increasing_id
 from pyspark.sql.functions import lit
 from pyspark.sql.functions import array_contains,array
+from pyspark.ml.feature import VectorAssembler
 from pyspark import SparkContext
 sc = SparkContext()
 
@@ -258,9 +259,28 @@ def distance2(filename, state1, state2):
     Return value: an integer.
     Test: tests/test_distance.py
     '''
-    points = zip(state1, state2)
+    spark = init_spark()
+    lines = spark.read.text(filename).rdd
+    parts= lines.map(lambda row: row.value.split(","))
+    rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
+    df = spark.createDataFrame(rdd_data)
+    states_data = all_states.all_states
+    tuple_list = [()]
+    for state_name in states_data:
+        dict={}
+        plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
+        for name in plant_names:
+            dict[name[0]]=1
+        tuple_data=(state_name,dict)
+        tuple_list.append(tuple_data)
+    rdd = sc.parallelize(tuple_list[1:])
+    data_f = spark.createDataFrame(rdd)
+    op = VectorAssembler(inputCols=["_2"], outputCol="features").transform(data_f)
+    print(op)
+    '''points = zip(state1, state2)
     diffs_squared_distance = [pow(a - b, 2) for (a, b) in points]
-    return math.sqrt(sum(diffs_squared_distance))
+    return math.sqrt(sum(diffs_squared_distance))'''
+    return 4
 
 def init_centroids(k, seed):
     '''
