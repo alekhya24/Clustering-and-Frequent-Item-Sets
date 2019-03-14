@@ -18,7 +18,6 @@ from pyspark.sql.functions import lit
 from pyspark.sql.functions import array_contains,array
 from pyspark.ml.feature import VectorAssembler
 from pyspark import SparkContext
-from collections import OrderedDict
 sc = SparkContext()
 
 
@@ -268,7 +267,7 @@ def distance2(filename, state1, state2):
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
     df = spark.createDataFrame(rdd_data)
     states_data = all_states.all_states
-    all_plants = sorted(df.select(df.plant_name).rdd.flatMap(lambda x: x).collect())
+    all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
     tuple_list1 = [()]
     tuple_list2 = [()]
     '''for state_name in states_data:
@@ -280,10 +279,10 @@ def distance2(filename, state1, state2):
     plant_names1 = df.select(df.plant_name).where(array_contains(df.states,state1)).rdd.flatMap(lambda x: x).collect()
     plant_names2 = df.select(df.plant_name).where(array_contains(df.states,state2)).rdd.flatMap(lambda x: x).collect()
     dict1= dict( [ (plant_name,1) if plant_name in plant_names1  else (plant_name,0) for plant_name in all_plants] )
-    '''sorted_dict1= sorted(dict1.keys())'''
-    print(dict1)
+    sorted_dict1= dict(sorted(dict1.items()))
+    print(sorted_dict1)
     dict2= dict( [ (plant_name,1) if plant_name in plant_names2  else (plant_name,0) for plant_name in all_plants] )
-    sorted_dict2= sorted(dict2.keys())
+    sorted_dict2= dict(sorted(dict2.items()))
     print(sorted_dict1)
     tuple_data1=(state1,sorted_dict1)
     tuple_data2=(state2,sorted_dict2)
@@ -295,6 +294,8 @@ def distance2(filename, state1, state2):
     data_f2 = spark.createDataFrame(rdd2)
     dict_op1 = data_f1.select(data_f1._2).collect()
     dict_op2 = data_f2.select(data_f2._2).collect()
+    test1=dict_op1[0][0].sortBy(lambda a: a[1])
+    print(test1)
     list1 = list(dict_op1[0][0].values())
     list2 = list(dict_op2[0][0].values())
     points = zip(list1, list2)
