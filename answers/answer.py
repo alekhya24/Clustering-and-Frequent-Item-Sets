@@ -275,14 +275,13 @@ def distance2(filename, state1, state2):
         tuple_list.append(tuple_data)
     rdd = sc.parallelize(tuple_list[1:])
     data_f = spark.createDataFrame(rdd)
-    dict_op = data_f.select(data_f._2).where(data_f._1 == state1).collect()
-    list1=list(dict_op[0][0].values())
-    print(list1)
-    print(op)
-    '''points = zip(state1, state2)
+    dict_op1 = data_f.select(data_f._2).where(data_f._1 == state1).collect()
+    list1=list(dict_op1[0][0].values())
+    dict_op2 = data_f.select(data_f._2).where(data_f._1 == state2).collect()
+    list2=list(dict_op2[0][0].values())   
+    points = zip(list1, list2)
     diffs_squared_distance = [pow(a - b, 2) for (a, b) in points]
-    return math.sqrt(sum(diffs_squared_distance))'''
-    return 4
+    return math.sqrt(sum(diffs_squared_distance))
 
 def init_centroids(k, seed):
     '''
