@@ -293,9 +293,8 @@ def distance2(filename, state1, state2):
     data_f2 = spark.createDataFrame(rdd2)
     dict_op1 = data_f1.select(data_f1._2).collect()
     dict_op2 = data_f2.select(data_f2._2).collect()
-    print(dict_op1)
-    print(dict_op1[0][0])
     list1 = list(dict_op1[0][0].values())
+    print(list1)
     list2 = list(dict_op2[0][0].values())
     points = zip(list1, list2)
     diffs_squared_distance = [pow(a - b, 2) for (a, b) in points]
