@@ -237,8 +237,8 @@ def data_preparation(filename, plant, state):
     states_data = all_states.all_states
     all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
     tuple_list = [()]
-    plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).collect()
-    dict1= dict( [ (plant_name,1) if plant_name in plant_names[0][0]  else (plant_name,0) for plant_name in all_plants] )
+    plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).rdd.flatMap(lambda x: x).collect()
+    dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants] )
     tuple_data=(state,dict1)
     print(tuple_data)
     tuple_list.append(tuple_data)
@@ -276,8 +276,8 @@ def distance2(filename, state1, state2):
         dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants ] )
         tuple_data=(state_name,dict1)
         tuple_list.append(tuple_data)'''
-    plant_names1 = df.select(df.plant_name).where(array_contains(df.states,state1)).collect()
-    plant_names2 = df.select(df.plant_name).where(array_contains(df.states,state2)).collect()
+    plant_names1 = df.select(df.plant_name).where(array_contains(df.states,state1)).rdd.flatMap(lambda x: x).collect()
+    plant_names2 = df.select(df.plant_name).where(array_contains(df.states,state2)).rdd.flatMap(lambda x: x).collect()
     dict1= dict( [ (plant_name,1) if plant_name in plant_names1  else (plant_name,0) for plant_name in all_plants] )
     dict2= dict( [ (plant_name,1) if plant_name in plant_names2  else (plant_name,0) for plant_name in all_plants] )
     tuple_data1=(state1,dict1)
