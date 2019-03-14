@@ -212,7 +212,7 @@ seed than used in the tests was used). The classes seem to make sense
 from a geographical point of view!
 '''
 
-def data_preparation(filename, plant, state):
+'''def data_preparation(filename, plant, state):
     '''
     This function creates an RDD in which every element is a tuple with 
     the state as first element and a dictionary representing a vector 
@@ -250,7 +250,7 @@ def data_preparation(filename, plant, state):
     if  plant in row.asDict().keys():
         return True
     else:
-        return False
+        return False'''
 
 def distance2(filename, state1, state2):
     '''
@@ -280,7 +280,7 @@ def distance2(filename, state1, state2):
     list1=list(dict_op1[0][0].values())
     dict_op2 = data_f.select(data_f._2).where(data_f._1 == state2).collect()
     list2=list(dict_op2[0][0].values())'''
-    vectorizer = VectorAssembler(inputCols=[None], outputCol="features")
+    vectorizer = VectorAssembler(inputCols="", outputCol="features")
     op=vectorizer.transform(data_f)
     print(op)
     points = zip(list1, list2)
