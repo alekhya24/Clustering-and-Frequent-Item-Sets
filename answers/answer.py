@@ -237,7 +237,6 @@ def data_preparation(filename, plant, state):
     states_data = all_states.all_states
     all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
     tuple_list = [()]
-    '''for state_name in states_data:'''
     plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).collect()
     dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants] )
     tuple_data=(state,dict1)
@@ -246,9 +245,9 @@ def data_preparation(filename, plant, state):
     data_f = spark.createDataFrame(rdd)
     data_f.show()
     dict_op = data_f.select(data_f._2).collect()
-    '''.where(data_f._1 == state).collect()'''
     row = Row(**dict_op[0][0])
-    if  plant in row.asDict().keys() and row[plant]==1:
+    if  plant in row.asDict().keys() and row.asDict()[plant]==1:
+        print(row.asDict()[plant])
         return True
     else:
         return False
@@ -268,17 +267,28 @@ def distance2(filename, state1, state2):
     df = spark.createDataFrame(rdd_data)
     states_data = all_states.all_states
     all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
-    tuple_list = [()]
+    tuple_list1 = [()]
+    tuple_list2 = [()]
     '''for state_name in states_data:
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
         dict1= dict( [ (plant_names[i],1) for i in range(len(plant_names)) ] )
         dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants ] )
         tuple_data=(state_name,dict1)
         tuple_list.append(tuple_data)'''
-    rdd = sc.parallelize(tuple_list[1:])
-    data_f = spark.createDataFrame(rdd)
-    dict_op1 = data_f.select(data_f._2).where(data_f._1 == state1).collect()
-    dict_op2 = data_f.select(data_f._2).where(data_f._1 == state2).collect()
+    plant_names1 = df.select(df.plant_name).where(array_contains(df.states,state1)).collect()
+    plant_names2 = df.select(df.plant_name).where(array_contains(df.states,state2)).collect()
+    dict1= dict( [ (plant_name,1) if plant_name in plant_names1  else (plant_name,0) for plant_name in all_plants] )
+    dict2= dict( [ (plant_name,1) if plant_name in plant_names2  else (plant_name,0) for plant_name in all_plants] )
+    tuple_data1=(state1,dict1)
+    tuple_data2=(state2,dict2)
+    tuple_list1.append(tuple_data1)
+    tuple_list2.append(tuple_data2)
+    rdd1 = sc.parallelize(tuple_list1[1:])
+    rdd2 = sc.parallelize(tuple_list2[1:])
+    data_f1 = spark.createDataFrame(rdd1)
+    data_f2 = spark.createDataFrame(rdd2)
+    dict_op1 = data_f1.select(data_f._2).collect()
+    dict_op2 = data_f2.select(data_f._2).collect()
     list1 = list(dict_op1[0][0].values)
     list2 = list(dict_op2[0][0].values)
     points = zip(list1, list2)
