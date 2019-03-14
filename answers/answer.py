@@ -212,7 +212,7 @@ seed than used in the tests was used). The classes seem to make sense
 from a geographical point of view!
 '''
 
-'''def data_preparation(filename, plant, state):
+    '''def data_preparation(filename, plant, state):
     '''
     This function creates an RDD in which every element is a tuple with 
     the state as first element and a dictionary representing a vector 
