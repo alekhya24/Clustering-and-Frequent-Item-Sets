@@ -235,7 +235,7 @@ def data_preparation(filename, plant, state):
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
     df = spark.createDataFrame(rdd_data)
     states_data = all_states.all_states
-    all_plants = df.select(df.plant_name)rdd.flatMap(lambda x: x).collect()
+    all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
     tuple_list = [()]
     for state_name in states_data:
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
@@ -265,6 +265,7 @@ def distance2(filename, state1, state2):
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
     df = spark.createDataFrame(rdd_data)
     states_data = all_states.all_states
+    all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
     tuple_list = [()]
     for state_name in states_data:
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
