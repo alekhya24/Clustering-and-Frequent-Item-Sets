@@ -237,11 +237,8 @@ def data_preparation(filename, plant, state):
     states_data = all_states.all_states
     tuple_list = [()]
     for state_name in states_data:
-        '''dict={}'''
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
         dict1= dict( [ (plant_names[i][0],1) for i in range(len(plant_names)) ] )
-        '''for name in plant_names:
-            dict[name[0]]=1'''
         tuple_data=(state_name,dict1)
         tuple_list.append(tuple_data)
     rdd = sc.parallelize(tuple_list[1:])
@@ -271,8 +268,6 @@ def distance2(filename, state1, state2):
     for state_name in states_data:
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
         dict1= dict( [ (plant_names[i],1) for i in range(len(plant_names)) ] )
-        '''for name in plant_names:
-            dict[name[0]]=1'''
         tuple_data=(state_name,dict1)
         tuple_list.append(tuple_data)
     rdd = sc.parallelize(tuple_list[1:])
