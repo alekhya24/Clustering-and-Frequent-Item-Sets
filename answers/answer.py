@@ -248,7 +248,7 @@ def data_preparation(filename, plant, state):
     dict_op = data_f.select(data_f._2).collect()
     '''.where(data_f._1 == state).collect()'''
     row = Row(**dict_op[0][0])
-    if  plant in row.asDict().keys():
+    if  plant in row.asDict().keys() and row[plant]==1:
         return True
     else:
         return False
