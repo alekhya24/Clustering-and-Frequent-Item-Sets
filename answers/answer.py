@@ -212,8 +212,8 @@ seed than used in the tests was used). The classes seem to make sense
 from a geographical point of view!
 '''
 
-    '''def data_preparation(filename, plant, state):
-    '''
+'''def data_preparation(filename, plant, state):
+    
     This function creates an RDD in which every element is a tuple with 
     the state as first element and a dictionary representing a vector 
     of plant as a second element:
@@ -228,7 +228,7 @@ from a geographical point of view!
 
     Return value: True if the plant occurs in the state and False otherwise.
     Test: tests/test_data_preparation.py
-    '''
+    
     spark = init_spark()
     lines = spark.read.text(filename).rdd
     parts= lines.map(lambda row: row.value.split(","))
