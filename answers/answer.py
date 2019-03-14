@@ -301,7 +301,7 @@ def distance2(filename, state1, state2):
     print(list1)
     points = zip(list1, list2)
     diffs_squared_distance = [pow(a - b, 2) for (a, b) in points]
-    return math.sqrt(sum(diffs_squared_distance))
+    return sum(diffs_squared_distance)
 
 def init_centroids(k, seed):
     '''
