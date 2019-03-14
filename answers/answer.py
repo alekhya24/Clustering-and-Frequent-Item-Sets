@@ -276,10 +276,14 @@ def distance2(filename, state1, state2):
         tuple_list.append(tuple_data)
     rdd = sc.parallelize(tuple_list[1:])
     data_f = spark.createDataFrame(rdd)
-    dict_op1 = data_f.select(data_f._2).where(data_f._1 == state1).collect()
+    '''dict_op1 = data_f.select(data_f._2).where(data_f._1 == state1).collect()
     list1=list(dict_op1[0][0].values())
     dict_op2 = data_f.select(data_f._2).where(data_f._1 == state2).collect()
-    list2=list(dict_op2[0][0].values())   
+    list2=list(dict_op2[0][0].values())'''
+    vectorizer = VectorAssembler()
+    vectorizer.setInputCols(None)
+    vectorizer.setOutputCol("features")
+    display(vectorizer.transform(data_f))
     points = zip(list1, list2)
     diffs_squared_distance = [pow(a - b, 2) for (a, b) in points]
     return math.sqrt(sum(diffs_squared_distance))
