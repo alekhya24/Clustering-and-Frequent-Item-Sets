@@ -318,7 +318,7 @@ def init_centroids(k, seed):
     random.seed(seed)
     random_states = random.sample(all_states.all_states,k)
     print(random_states)
-    return []
+    return random_states
 
 def first_iter(filename, k, seed):
     '''
