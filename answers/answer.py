@@ -246,7 +246,7 @@ def data_preparation(filename, plant, state):
     data_f.show()
     dict_op = data_f.select(data_f._2).collect()
     row = Row(**dict_op[0][0])
-    if  plant in row.asDict().keys() and row.asDict()[plant]==1:
+    if  plant in row.asDict().keys():
         print(row.asDict()[plant])
         return True
     else:
