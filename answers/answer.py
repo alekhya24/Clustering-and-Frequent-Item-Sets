@@ -16,9 +16,7 @@ from pyspark.sql.functions import desc, size, max, abs
 from pyspark.sql.functions import monotonically_increasing_id
 from pyspark.sql.functions import lit
 from pyspark.sql.functions import array_contains,array
-from pyspark.ml.feature import VectorAssembler
 from pyspark import SparkContext
-from collections import OrderedDict
 sc = SparkContext()
 
 
@@ -271,12 +269,6 @@ def distance2(filename, state1, state2):
     all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
     tuple_list1 = [()]
     tuple_list2 = [()]
-    '''for state_name in states_data:
-        plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
-        dict1= dict( [ (plant_names[i],1) for i in range(len(plant_names)) ] )
-        dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants ] )
-        tuple_data=(state_name,dict1)
-        tuple_list.append(tuple_data)'''
     plant_names1 = df.select(df.plant_name).where(array_contains(df.states,state1)).rdd.flatMap(lambda x: x).collect()
     plant_names2 = df.select(df.plant_name).where(array_contains(df.states,state2)).rdd.flatMap(lambda x: x).collect()
     dict1= dict( [ (plant_name,1) if plant_name in plant_names1  else (plant_name,0) for plant_name in all_plants] )
@@ -323,6 +315,9 @@ def init_centroids(k, seed):
     Return value: a list of <k> states.
     Test: tests/test_init_centroids.py
     '''
+    random.seed(seed)
+    random_states = random.sample(all_states.all_states,k)
+    print(random_states)
     return []
 
 def first_iter(filename, k, seed):
