@@ -228,7 +228,7 @@ def data_preparation(filename, plant, state):
 
     Return value: True if the plant occurs in the state and False otherwise.
     Test: tests/test_data_preparation.py
-    
+    '''
     spark = init_spark()
     lines = spark.read.text(filename).rdd
     parts= lines.map(lambda row: row.value.split(","))
@@ -237,10 +237,12 @@ def data_preparation(filename, plant, state):
     states_data = all_states.all_states
     tuple_list = [()]
     for state_name in states_data:
-        dict={}
+        '''dict={}'''
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
         for name in plant_names:
-            dict[name[0]]=1
+        dict1= dict( [ (plant_names[i],1) for i in range(len(plant_names)) ] )
+        '''for name in plant_names:
+            dict[name[0]]=1'''
         tuple_data=(state_name,dict)
         tuple_list.append(tuple_data)
     rdd = sc.parallelize(tuple_list[1:])
@@ -250,8 +252,7 @@ def data_preparation(filename, plant, state):
     if  plant in row.asDict().keys():
         return True
     else:
-        return False'''
-    return False
+        return False
 
 def distance2(filename, state1, state2):
     '''
@@ -269,21 +270,15 @@ def distance2(filename, state1, state2):
     states_data = all_states.all_states
     tuple_list = [()]
     for state_name in states_data:
-        dict={}
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state_name)).collect()
-        for name in plant_names:
-            dict[name[0]]=1
+        dict1= dict( [ (plant_names[i],1) for i in range(len(plant_names)) ] )
+        '''for name in plant_names:
+            dict[name[0]]=1'''
         tuple_data=(state_name,dict)
         tuple_list.append(tuple_data)
     rdd = sc.parallelize(tuple_list[1:])
     data_f = spark.createDataFrame(rdd)
-    '''dict_op1 = data_f.select(data_f._2).where(data_f._1 == state1).collect()
-    list1=list(dict_op1[0][0].values())
-    dict_op2 = data_f.select(data_f._2).where(data_f._1 == state2).collect()
-    list2=list(dict_op2[0][0].values())'''
-    vectorizer = VectorAssembler(inputCols="", outputCol="features")
-    op=vectorizer.transform(data_f)
-    print(op)
+
     points = zip(list1, list2)
     diffs_squared_distance = [pow(a - b, 2) for (a, b) in points]
     return math.sqrt(sum(diffs_squared_distance))
