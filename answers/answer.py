@@ -281,6 +281,7 @@ def distance2(filename, state1, state2):
     plant_names2 = df.select(df.plant_name).where(array_contains(df.states,state2)).rdd.flatMap(lambda x: x).collect()
     dict1= dict( [ (plant_name,1) if plant_name in plant_names1  else (plant_name,0) for plant_name in all_plants] )
     sorted_dict1= OrderedDict(sorted(dict1.items(), key=lambda x:x[0]))
+    print(sorted_dict1)
     dict2= dict( [ (plant_name,1) if plant_name in plant_names2  else (plant_name,0) for plant_name in all_plants] )
     sorted_dict2= OrderedDict(sorted(dict2.items(), key=lambda x:x[0]))
     tuple_data1=(state1,sorted_dict1)
@@ -297,7 +298,6 @@ def distance2(filename, state1, state2):
     list2 = list(dict_op2[0][0].values())
     print(list1)
     points = zip(list1, list2)
-    print(points)
     diffs_squared_distance = [pow(a - b, 2) for (a, b) in points]
     return math.sqrt(sum(diffs_squared_distance))
 
