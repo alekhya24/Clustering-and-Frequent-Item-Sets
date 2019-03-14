@@ -280,14 +280,13 @@ def distance2(filename, state1, state2):
     plant_names1 = df.select(df.plant_name).where(array_contains(df.states,state1)).rdd.flatMap(lambda x: x).collect()
     plant_names2 = df.select(df.plant_name).where(array_contains(df.states,state2)).rdd.flatMap(lambda x: x).collect()
     dict1= dict( [ (plant_name,1) if plant_name in plant_names1  else (plant_name,0) for plant_name in all_plants] )
-    dict1.update((k,0) for k,v in dict1.items() if v is None)
-    sorted_dict1= OrderedDict(sorted(dict1.items(), key=lambda x:x[0]))
-    print(sorted_dict1)
+    '''dict1.update((k,0) for k,v in dict1.items() if v is None)
+    sorted_dict1= OrderedDict(sorted(dict1.items(), key=lambda x:x[0]))'''
     dict2= dict( [ (plant_name,1) if plant_name in plant_names2  else (plant_name,0) for plant_name in all_plants] )
-    dict2.update((k,0) for k,v in dict2.items() if v is None)
-    sorted_dict2= OrderedDict(sorted(dict2.items(), key=lambda x:x[0]))
-    tuple_data1=(state1,sorted_dict1)
-    tuple_data2=(state2,sorted_dict2)
+    '''dict2.update((k,0) for k,v in dict2.items() if v is None)
+    sorted_dict2= OrderedDict(sorted(dict2.items(), key=lambda x:x[0]))'''
+    tuple_data1=(state1,dict1)
+    tuple_data2=(state2,dict2)
     tuple_list1.append(tuple_data1)
     tuple_list2.append(tuple_data2)
     rdd1 = sc.parallelize(tuple_list1[1:])
@@ -296,8 +295,10 @@ def distance2(filename, state1, state2):
     data_f2 = spark.createDataFrame(rdd2)
     dict_op1 = data_f1.select(data_f1._2).collect()
     dict_op2 = data_f2.select(data_f2._2).collect()
-    list1 = list(filter(None.__ne__,list(dict_op1[0][0].values())))
-    list2 = list(filter(None.__ne__,list(dict_op2[0][0].values())))
+    '''list1 = list(filter(None.__ne__,list(dict_op1[0][0].values())))
+    list2 = list(filter(None.__ne__,list(dict_op2[0][0].values())))'''
+    list1=list(dict_op1[0][0].values())
+    list2=list(dict_op2[0][0].values())
     print(list1)
     points = zip(list1, list2)
     diffs_squared_distance = [pow(a - b, 2) for (a, b) in points]
