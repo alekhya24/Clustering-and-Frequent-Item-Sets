@@ -280,9 +280,7 @@ def distance2(filename, state1, state2):
     list1=list(dict_op1[0][0].values())
     dict_op2 = data_f.select(data_f._2).where(data_f._1 == state2).collect()
     list2=list(dict_op2[0][0].values())'''
-    vectorizer = VectorAssembler()
-    vectorizer.setInputCols(None)
-    vectorizer.setOutputCol("features")
+    vectorizer = VectorAssembler(inputCols=[None], outputCol="features")
     op=vectorizer.transform(data_f)
     print(op)
     points = zip(list1, list2)
