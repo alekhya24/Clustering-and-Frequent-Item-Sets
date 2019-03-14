@@ -238,7 +238,7 @@ def data_preparation(filename, plant, state):
     all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
     tuple_list = [()]
     plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).collect()
-    dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants] )
+    dict1= dict( [ (plant_name,1) if plant_name in plant_names[0][0]  else (plant_name,0) for plant_name in all_plants] )
     tuple_data=(state,dict1)
     print(tuple_data)
     tuple_list.append(tuple_data)
