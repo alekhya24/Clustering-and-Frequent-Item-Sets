@@ -268,7 +268,7 @@ def distance2(filename, state1, state2):
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
     df = spark.createDataFrame(rdd_data)
     states_data = all_states.all_states
-    all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
+    all_plants = sorted(df.select(df.plant_name).rdd.flatMap(lambda x: x).collect())
     tuple_list1 = [()]
     tuple_list2 = [()]
     '''for state_name in states_data:
@@ -280,8 +280,8 @@ def distance2(filename, state1, state2):
     plant_names1 = df.select(df.plant_name).where(array_contains(df.states,state1)).rdd.flatMap(lambda x: x).collect()
     plant_names2 = df.select(df.plant_name).where(array_contains(df.states,state2)).rdd.flatMap(lambda x: x).collect()
     dict1= dict( [ (plant_name,1) if plant_name in plant_names1  else (plant_name,0) for plant_name in all_plants] )
-    sorted_dict1= sorted(dict1.keys())
-    print(sorted_dict1)
+    '''sorted_dict1= sorted(dict1.keys())'''
+    print(dict1)
     dict2= dict( [ (plant_name,1) if plant_name in plant_names2  else (plant_name,0) for plant_name in all_plants] )
     sorted_dict2= sorted(dict2.keys())
     print(sorted_dict1)
