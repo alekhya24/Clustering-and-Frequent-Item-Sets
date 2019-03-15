@@ -352,6 +352,7 @@ def first_iter(filename, k, seed):
                 for center in centers:
                     if map_list[center][data_point_index]==None:
                         map_list[center][data_point_index] = distance2(filename,states[data_point_index],states[center])
+                        print(map_list)
                         if min_value>map_list[center][data_point_index]:
                             min_value = map_list[center][data_point_index]
                             goal_center = center
