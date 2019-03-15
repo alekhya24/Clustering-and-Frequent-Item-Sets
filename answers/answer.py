@@ -333,43 +333,39 @@ def first_iter(filename, k, seed):
 
     Test: tests/test_first_iter.py
     '''
-    random.seed(seed)
-    random_states = random.sample(all_states.all_states,k)
     states=all_states.all_states
-    oldCentroids = random_states[:]
-        
-    # create an rdd composed of each point along with the centroid it belongs to using the closesPoint function
-    pointCentroidPair = states.map(lambda line: (closestPoint(line, centroids), line))
-    for i in range(k):
-            # create an rdd of only points that belong to the kth cluster
-            clusterPoints = pointCentroidPair.filter(lambda line: line[0] == i)
-            clusterPoints.persist()
-            totalPoints = float(clusterPoints.count())
-            # sum all the points in the cluster
-            clusterSum = clusterPoints.reduceByKey(lambda c1, c2: addPoints(c1, c2))
+    random.seed(seed)
+    random_states = random.sample(states,k)
+    
+    centers = random.sample(range(len(states)),k)
 
-            # if the kth cluster contains points:
-            if clusterSum.count() != 0:
-            # create a new centroid by taking the average of all the points in the cluster
-                newCentroid = clusterSum.map(lambda pointSum: ((pointSum[1][0] / totalPoints), (pointSum[1][1] / totalPoints)))	
-                # update the centroids array with the new centroid
-                centroids[i] = newCentroid.take(1)[0]
-    print(centroids)
+    data_points_index = list(range(len(states)))
+
+	for iteration in range(1):
+		new_cluster = {center:[] for center in centers}
+
+		for data_point_index in data_points_index:
+			if data_point_index not in centers:
+
+				min_value = float('inf')
+				min_goal = None
+				min_data_point = None
+
+				for center in centers:
+					if map_list[center][data_point_index]==None:
+						map_list[center][data_point_index] = distance2(filename,states[data_point_index],states[center])
+					if min_value>map_list[center][data_point_index]:
+						min_value = map_list[center][data_point_index]
+						goal_center = center
+				new_cluster[goal_center].append(data_point_index)
+
+                print(new_cluster)
+
     return {}
 
-def closestPoint(point, centerpoints):
-    shortestDistanceIndex = 0
-    currentIndex = 0
-    shortestDistance = float("inf")
+    def calculate_distance(point1,point2):
 
-    for cp in centerpoints:
-        distance = math.sqrt(math.pow((point[0] - cp[0]), 2) + math.pow((point[1] - cp[1]), 2))
-        if (distance < shortestDistance):
-            shortestDistance = distance
-            shortestDistanceIndex = currentIndex
-        currentIndex = currentIndex + 1
-
-    return shortestDistanceIndex
+	return np.linalg.norm(np.array(point1)-np.array(point2))
 
 
 def kmeans(filename, k, seed):
