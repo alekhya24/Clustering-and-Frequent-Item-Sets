@@ -351,12 +351,11 @@ def first_iter(filename, k, seed):
                 min_data_point = None
                 for center in centers:
                     if map_list[center][data_point_index]==None:
-			map_list[center][data_point_index] = distance2(filename,states[data_point_index],states[center])
-			if min_value>map_list[center][data_point_index]:
+                        map_list[center][data_point_index] = distance2(filename,states[data_point_index],states[center])
+                        if min_value>map_list[center][data_point_index]:
                             min_value = map_list[center][data_point_index]
                             goal_center = center
                             new_cluster[goal_center].append(data_point_index)
-
         print(new_cluster)
 
     return {}
