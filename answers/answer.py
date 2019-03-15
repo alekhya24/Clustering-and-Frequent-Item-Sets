@@ -338,7 +338,7 @@ def first_iter(filename, k, seed):
     random_states = random.sample(states,k)
     
     centers = random.sample(range(len(states)),k)
-
+    map_list = [[None for i in states] for i in states]
     data_points_index = list(range(len(states)))
 
     for iteration in range(1):
