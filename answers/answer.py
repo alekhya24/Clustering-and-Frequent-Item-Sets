@@ -333,7 +333,44 @@ def first_iter(filename, k, seed):
 
     Test: tests/test_first_iter.py
     '''
+    random.seed(seed)
+    random_states = random.sample(all_states.all_states,k)
+    states=all_states.all_states
+    oldCentroids = random_states[:]
+        
+    # create an rdd composed of each point along with the centroid it belongs to using the closesPoint function
+    pointCentroidPair = states.map(lambda line: (closestPoint(line, centroids), line))
+    for i in range(k):
+            # create an rdd of only points that belong to the kth cluster
+            clusterPoints = pointCentroidPair.filter(lambda line: line[0] == i)
+            clusterPoints.persist()
+            totalPoints = float(clusterPoints.count())
+            # sum all the points in the cluster
+            clusterSum = clusterPoints.reduceByKey(lambda c1, c2: addPoints(c1, c2))
+
+            # if the kth cluster contains points:
+            if clusterSum.count() != 0:
+            # create a new centroid by taking the average of all the points in the cluster
+                newCentroid = clusterSum.map(lambda pointSum: ((pointSum[1][0] / totalPoints), (pointSum[1][1] / totalPoints)))	
+                # update the centroids array with the new centroid
+                centroids[i] = newCentroid.take(1)[0]
+    print(centroids)
     return {}
+
+def closestPoint(point, centerpoints):
+    shortestDistanceIndex = 0
+    currentIndex = 0
+    shortestDistance = float("inf")
+
+    for cp in centerpoints:
+        distance = math.sqrt(math.pow((point[0] - cp[0]), 2) + math.pow((point[1] - cp[1]), 2))
+        if (distance < shortestDistance):
+            shortestDistance = distance
+            shortestDistanceIndex = currentIndex
+        currentIndex = currentIndex + 1
+
+    return shortestDistanceIndex
+
 
 def kmeans(filename, k, seed):
     '''
