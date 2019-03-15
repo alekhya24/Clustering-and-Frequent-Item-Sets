@@ -346,10 +346,10 @@ def first_iter(filename, k, seed):
 
         for data_point_index in data_points_index:
             if data_point_index not in centers:
-		min_value = float('inf')
-		min_goal = None
-		min_data_point = None
-		for center in centers:
+                min_value = float('inf')
+                min_goal = None
+                min_data_point = None
+                for center in centers:
                     if map_list[center][data_point_index]==None:
 			map_list[center][data_point_index] = distance2(filename,states[data_point_index],states[center])
 			if min_value>map_list[center][data_point_index]:
