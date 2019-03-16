@@ -20,7 +20,8 @@ from pyspark import SparkContext
 sc = SparkContext()
 
 all_plants=None
-dict_list=None
+data_f=None
+df=None
 '''
 INTRODUCTION
 
@@ -255,7 +256,9 @@ def createDict(states):
         tuple_data=(state,dict1)
         print(tuple_data)
         dict_list.append(tuple_data)
-    dict_list.cache()
+    rdd = sc.parallelize(dict_list[1:])
+    data_f = spark.createDataFrame(rdd)
+    data_f.cache()
 
 def distance2(filename, state1, state2):
     '''
