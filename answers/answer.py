@@ -238,7 +238,8 @@ def data_preparation(filename, plant, state):
     df.cache()
     states_data = all_states.all_states
     all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
-    data_f=createDict(df,states_data,all_plants)
+    rdd=createDict(df,states_data,all_plants)
+    data_f = spark.createDataFrame(rdd)
     data_f.cache()
     dict_op = data_f.select(data_f._2).where(lambda x:x.data_f._1==state).collect()
     row = Row(**dict_op[0][0])
@@ -256,8 +257,7 @@ def createDict(df,states,all_plants):
         tuple_data=(state,dict1)
         dict_list.append(tuple_data)
     rdd = sc.parallelize(dict_list[1:])
-    data_f = spark.createDataFrame(rdd)
-    return data_f
+    return rdd
 
 def distance2(filename, state1, state2):
     '''
