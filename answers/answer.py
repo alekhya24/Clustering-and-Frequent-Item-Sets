@@ -20,7 +20,7 @@ from pyspark import SparkContext
 sc = SparkContext()
 
 global all_plants
-global data_f
+data_f=None
 global df
 '''
 INTRODUCTION
@@ -239,6 +239,7 @@ def data_preparation(filename, plant, state):
     states_data = all_states.all_states
     all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
     rdd=createDict(df,states_data,all_plants)
+    global data_f
     data_f = spark.createDataFrame(rdd)
     data_f.cache()
     dict_op=getFromDict(state)
