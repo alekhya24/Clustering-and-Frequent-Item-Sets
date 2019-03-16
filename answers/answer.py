@@ -235,8 +235,7 @@ def data_preparation(filename, plant, state):
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
     df = spark.createDataFrame(rdd_data)
     states_data = all_states.all_states
-    all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x)
-    all_plants.cache()
+    all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
     createDict(states_data)
     rdd = sc.parallelize(dict_list[1:])
     data_f = spark.createDataFrame(rdd)
@@ -251,7 +250,7 @@ def data_preparation(filename, plant, state):
 def createDict(states):
     for state in states:
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).rdd.flatMap(lambda x: x).collect()
-        dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants.collect()] )
+        dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants] )
         tuple_data=(state,dict1)
         print(tuple_data)
         dict_list.append(tuple_data)
