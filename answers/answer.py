@@ -241,13 +241,18 @@ def data_preparation(filename, plant, state):
     rdd=createDict(df,states_data,all_plants)
     data_f = spark.createDataFrame(rdd)
     data_f.cache()
-    dict_op = data_f.select(data_f._2).where(data_f._1==state).collect()
+    dict_op=getFromDict(state)
+    '''dict_op = data_f.select(data_f._2).where(data_f._1==state).collect()'''
     row = Row(**dict_op[0][0])
     if  plant in row.asDict().keys() and row.asDict()[plant]==1:
         print(row.asDict()[plant])
         return True
     else:
         return False
+
+def getFromDict(state):
+    dict_op = data_f.select(data_f._2).where(data_f._1==state).collect()
+    return dict_op
 
 def createDict(df,states,all_plants):
     dict_list=[()]
@@ -273,27 +278,30 @@ def distance2(filename, state1, state2):
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
     df = spark.createDataFrame(rdd_data)
     states_data = all_states.all_states
-    all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
     tuple_list1 = [()]
     tuple_list2 = [()]
-    plant_names1 = df.select(df.plant_name).where(array_contains(df.states,state1)).rdd.flatMap(lambda x: x).collect()
+    '''plant_names1 = df.select(df.plant_name).where(array_contains(df.states,state1)).rdd.flatMap(lambda x: x).collect()
     plant_names2 = df.select(df.plant_name).where(array_contains(df.states,state2)).rdd.flatMap(lambda x: x).collect()
     dict1= dict( [ (plant_name,1) if plant_name in plant_names1  else (plant_name,0) for plant_name in all_plants] )
-    '''dict1.update((k,0) for k,v in dict1.items() if v is None)
-    sorted_dict1= OrderedDict(sorted(dict1.items(), key=lambda x:x[0]))'''
+    dict1.update((k,0) for k,v in dict1.items() if v is None)
+    sorted_dict1= OrderedDict(sorted(dict1.items(), key=lambda x:x[0]))
     dict2= dict( [ (plant_name,1) if plant_name in plant_names2  else (plant_name,0) for plant_name in all_plants] )
-    '''dict2.update((k,0) for k,v in dict2.items() if v is None)
-    sorted_dict2= OrderedDict(sorted(dict2.items(), key=lambda x:x[0]))'''
+    dict2.update((k,0) for k,v in dict2.items() if v is None)
+    sorted_dict2= OrderedDict(sorted(dict2.items(), key=lambda x:x[0]))
     tuple_data1=(state1,dict1)
     tuple_data2=(state2,dict2)
     tuple_list1.append(tuple_data1)
     tuple_list2.append(tuple_data2)
     rdd1 = sc.parallelize(tuple_list1[1:])
-    rdd2 = sc.parallelize(tuple_list2[1:])
+    rdd2 = sc.parallelize(tuple_list2[1:])'''
+    '''rdd1=createDict(df,states_data,all_plants)
+    rdd2=createDict(df,states_data,all_plants)
     data_f1 = spark.createDataFrame(rdd1)
     data_f2 = spark.createDataFrame(rdd2)
     dict_op1 = data_f1.select(data_f1._2).collect()
-    dict_op2 = data_f2.select(data_f2._2).collect()
+    dict_op2 = data_f2.select(data_f2._2).collect()'''
+    dict_op1=getFromDict(state1)
+    dict_op2=getFromDict(state2)
     '''list1 = list(filter(None.__ne__,list(dict_op1[0][0].values())))
     list2 = list(filter(None.__ne__,list(dict_op2[0][0].values())))'''
     list1=list(dict_op1[0][0].values())
