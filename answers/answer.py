@@ -19,7 +19,8 @@ from pyspark.sql.functions import array_contains,array
 from pyspark import SparkContext
 sc = SparkContext()
 
-
+all_plants=None
+dict_list=None
 '''
 INTRODUCTION
 
@@ -235,22 +236,26 @@ def data_preparation(filename, plant, state):
     df = spark.createDataFrame(rdd_data)
     states_data = all_states.all_states
     all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
-    tuple_list = [()]
-    plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).rdd.flatMap(lambda x: x).collect()
-    dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants] )
-    tuple_data=(state,dict1)
-    print(tuple_data)
-    tuple_list.append(tuple_data)
-    rdd = sc.parallelize(tuple_list[1:])
+    all_plants.cache()
+    createDict(states_data)
+    rdd = sc.parallelize(dict_list[1:])
     data_f = spark.createDataFrame(rdd)
-    data_f.show()
-    dict_op = data_f.select(data_f._2).collect()
+    dict_op = data_f.select(data_f._2).where(x=>x.data_f._1==state).collect()
     row = Row(**dict_op[0][0])
     if  plant in row.asDict().keys() and row.asDict()[plant]==1:
         print(row.asDict()[plant])
         return True
     else:
         return False
+
+def createDict(states):
+    for state in states:
+        plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).rdd.flatMap(lambda x: x).collect()
+        dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants] )
+        tuple_data=(state,dict1)
+        print(tuple_data)
+        dict_list.append(tuple_data)
+    dict_list.cache()
 
 def distance2(filename, state1, state2):
     '''
@@ -335,9 +340,9 @@ def first_iter(filename, k, seed):
     '''
     states=all_states.all_states
     random.seed(seed)
-    random_states = random.sample(states,k)
-    
-    centers = random.sample(range(len(states)),k)
+    centers =random.sample(states,k)
+    '''random.sample(range(len(states)),k)'''
+    print(centers)
     map_list = [[None for i in states] for i in states]
     data_points_index = list(range(len(states)))
 
