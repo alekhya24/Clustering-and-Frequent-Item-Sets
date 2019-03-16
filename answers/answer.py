@@ -19,9 +19,9 @@ from pyspark.sql.functions import array_contains,array
 from pyspark import SparkContext
 sc = SparkContext()
 
-all_plants=None
-data_f=None
-df=None
+global all_plants
+global data_f
+global df
 '''
 INTRODUCTION
 
@@ -238,7 +238,7 @@ def data_preparation(filename, plant, state):
     df.cache()
     states_data = all_states.all_states
     all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
-    data_f=dictcreateDict(df,states_data,all_plants)
+    data_f=createDict(df,states_data,all_plants)
     data_f.cache()
     dict_op = data_f.select(data_f._2).where(lambda x:x.data_f._1==state).collect()
     row = Row(**dict_op[0][0])
