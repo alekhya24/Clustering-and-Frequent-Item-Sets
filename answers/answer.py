@@ -240,7 +240,7 @@ def data_preparation(filename, plant, state):
     createDict(states_data)
     rdd = sc.parallelize(dict_list[1:])
     data_f = spark.createDataFrame(rdd)
-    dict_op = data_f.select(data_f._2).where(x=>x.data_f._1==state).collect()
+    dict_op = data_f.select(data_f._2).where(lambda x:x.data_f._1==state).collect()
     row = Row(**dict_op[0][0])
     if  plant in row.asDict().keys() and row.asDict()[plant]==1:
         print(row.asDict()[plant])
