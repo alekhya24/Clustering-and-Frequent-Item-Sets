@@ -238,7 +238,7 @@ def data_preparation(filename, plant, state):
     df.cache()
     states_data = all_states.all_states
     all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
-    createDict(states_data)
+    createDict(df,states_data)
     rdd = sc.parallelize(dict_list[1:])
     data_f = spark.createDataFrame(rdd)
     dict_op = data_f.select(data_f._2).where(lambda x:x.data_f._1==state).collect()
@@ -249,7 +249,8 @@ def data_preparation(filename, plant, state):
     else:
         return False
 
-def createDict(states):
+def createDict(df,states):
+    dictList=[()]
     for state in states:
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).rdd.flatMap(lambda x: x).collect()
         dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants] )
