@@ -234,6 +234,7 @@ def data_preparation(filename, plant, state):
     parts= lines.map(lambda row: row.value.split(","))
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
     df = spark.createDataFrame(rdd_data)
+    df.cache()
     states_data = all_states.all_states
     all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
     createDict(states_data)
