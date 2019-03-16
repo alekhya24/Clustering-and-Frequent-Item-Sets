@@ -249,7 +249,7 @@ def data_preparation(filename, plant, state):
         return False
 
 def createDict(df,states,all_plants):
-    dictList=[()]
+    dict_list=[()]
     for state in states:
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).rdd.flatMap(lambda x: x).collect()
         dict1= dict( [ (plant_name,1) if plant_name in plant_names  else (plant_name,0) for plant_name in all_plants] )
