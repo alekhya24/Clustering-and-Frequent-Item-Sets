@@ -19,9 +19,9 @@ from pyspark.sql.functions import array_contains,array
 from pyspark import SparkContext
 sc = SparkContext()
 
-global all_plants
+all_plants=None
 data_f=None
-global df
+data_df=None
 '''
 INTRODUCTION
 
@@ -234,11 +234,12 @@ def data_preparation(filename, plant, state):
     lines = spark.read.text(filename).rdd
     parts= lines.map(lambda row: row.value.split(","))
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
-    df = spark.createDataFrame(rdd_data)
-    df.cache()
+    global data_df
+    data_df = spark.createDataFrame(rdd_data)
+    data_df.cache()
     states_data = all_states.all_states
-    all_plants = df.select(df.plant_name).rdd.flatMap(lambda x: x).collect()
-    rdd=createDict(df,states_data,all_plants)
+    all_plants = data_df.select(data_df.plant_name).rdd.flatMap(lambda x: x).collect()
+    rdd=createDict(data_df,states_data,all_plants)
     global data_f
     data_f = spark.createDataFrame(rdd)
     data_f.cache()
@@ -274,10 +275,10 @@ def distance2(filename, state1, state2):
     Test: tests/test_distance.py
     '''
     spark = init_spark()
-    lines = spark.read.text(filename).rdd
+    '''lines = spark.read.text(filename).rdd
     parts= lines.map(lambda row: row.value.split(","))
     rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
-    df = spark.createDataFrame(rdd_data)
+    df = spark.createDataFrame(rdd_data)'''
     states_data = all_states.all_states
     tuple_list1 = [()]
     tuple_list2 = [()]
@@ -335,7 +336,7 @@ def first_iter(filename, k, seed):
     print(centers)
     map_list = [[None for i in states] for i in states]
     print(map_list)
-    data_points_index = list(range(len(states)))
+    data_points_index = list(states)
 
     for iteration in range(1):
         new_cluster = {center:[] for center in centers}
