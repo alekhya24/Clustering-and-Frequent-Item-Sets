@@ -19,6 +19,7 @@ from pyspark.sql.functions import array_contains,array
 from pyspark import SparkContext
 sc = SparkContext()
 
+states=all_states.all_states
 all_plants=None
 data_f=None
 data_df=None
@@ -237,9 +238,8 @@ def data_preparation(filename, plant, state):
     global data_df
     data_df = spark.createDataFrame(rdd_data)
     data_df.cache()
-    states_data = all_states.all_states
     all_plants = data_df.select(data_df.plant_name).rdd.flatMap(lambda x: x).collect()
-    rdd=createDict(data_df,states_data,all_plants)
+    rdd=createDict(data_df,all_plants)
     global data_f
     data_f = spark.createDataFrame(rdd)
     data_f.cache()
@@ -256,7 +256,7 @@ def getFromDict(state):
     dict_op = data_f.select(data_f._2).where(data_f._1==state).collect()
     return dict_op
 
-def createDict(df,states,all_plants):
+def createDict(df,all_plants):
     dict_list=[()]
     for state in states:
         plant_names = df.select(df.plant_name).where(array_contains(df.states,state)).rdd.flatMap(lambda x: x).collect()
@@ -274,12 +274,6 @@ def distance2(filename, state1, state2):
     Return value: an integer.
     Test: tests/test_distance.py
     '''
-    spark = init_spark()
-    '''lines = spark.read.text(filename).rdd
-    parts= lines.map(lambda row: row.value.split(","))
-    rdd_data = parts.map(lambda p: Row(plant_name=p[0], states=p[1:]))
-    df = spark.createDataFrame(rdd_data)'''
-    states_data = all_states.all_states
     tuple_list1 = [()]
     tuple_list2 = [()]
     dict_op1=getFromDict(state1)
@@ -332,11 +326,10 @@ def first_iter(filename, k, seed):
     states=all_states.all_states
     random.seed(seed)
     centers =random.sample(states,k)
-    map_list = [[None for state in states] for state in states]
+    map_list = [[None for i in states] for i in states]
     data_points_index = list(states)
     for iteration in range(1):
-        new_cluster = {center:[] for center in centers}
-
+        new_cluster = {center:[center] for center in centers}
         for data_point_index in data_points_index:
             if data_point_index not in centers:
                 min_value = float('inf')
