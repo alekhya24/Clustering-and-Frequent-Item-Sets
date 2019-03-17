@@ -343,7 +343,7 @@ def first_iter(filename, k, seed):
                         if min_value>map_list[center_id][index_id]:
                             min_value = map_list[center_id][index_id]
                             goal_center = center
-                            new_cluster[goal_center].append(data_point_index)
+                            sorted(new_cluster[goal_center].append(sorted(data_point_index)))
         print(new_cluster)
 
     return new_cluster
