@@ -336,7 +336,7 @@ def first_iter(filename, k, seed):
     print(centers)
     map_list = [[None for state in states] for state in states]
     print(map_list)
-    data_points_index = list(range(len(states)))
+    data_points_index = list(states)
     print(data_points_index)
     for iteration in range(1):
         new_cluster = {center:[] for center in centers}
@@ -348,11 +348,12 @@ def first_iter(filename, k, seed):
                 min_data_point = None
                 for center in centers:
                     center_id=data_points_index.index(center)
-                    if map_list[center_id][data_point_index]==None:
-                        map_list[center_id][data_point_index] = distance2(filename,states[data_point_index],states[center])
+                    index_id=data_points_index.index(data_point_index)
+                    if map_list[center_id][index_id]==None:
+                        map_list[center_id][index_id] = distance2(filename,states[index_id],states[center_id])
                         print(map_list)
-                        if min_value>map_list[center_id][data_point_index]:
-                            min_value = map_list[center_id][data_point_index]
+                        if min_value>map_list[center_id][index_id]:
+                            min_value = map_list[center_id][index_id]
                             goal_center = center
                             new_cluster[goal_center].append(data_point_index)
         print(new_cluster)
