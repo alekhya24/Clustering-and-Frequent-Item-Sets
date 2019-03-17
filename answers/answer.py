@@ -336,7 +336,7 @@ def first_iter(filename, k, seed):
     print(centers)
     map_list = [[None for state in states] for state in states]
     print(map_list)
-    data_points_index = list(states)
+    data_points_index = list(range(len(states)))
     print(data_points_index)
     for iteration in range(1):
         new_cluster = {center:[] for center in centers}
