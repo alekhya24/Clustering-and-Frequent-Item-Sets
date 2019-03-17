@@ -334,10 +334,10 @@ def first_iter(filename, k, seed):
     centers =random.sample(states,k)
     '''random.sample(range(len(states)),k)'''
     print(centers)
-    map_list = [[None for i in states] for i in states]
+    map_list = [[None for state in states] for state in states]
     print(map_list)
     data_points_index = list(states)
-
+    print(data_points_index)
     for iteration in range(1):
         new_cluster = {center:[] for center in centers}
 
@@ -347,11 +347,12 @@ def first_iter(filename, k, seed):
                 min_goal = None
                 min_data_point = None
                 for center in centers:
-                    if map_list[center][data_point_index]==None:
-                        map_list[center][data_point_index] = distance2(filename,states[data_point_index],states[center])
+                    center_id=data_points_index.index(center)
+                    if map_list[center_id][data_point_index]==None:
+                        map_list[center_id][data_point_index] = distance2(filename,states[data_point_index],states[center])
                         print(map_list)
-                        if min_value>map_list[center][data_point_index]:
-                            min_value = map_list[center][data_point_index]
+                        if min_value>map_list[center_id][data_point_index]:
+                            min_value = map_list[center_id][data_point_index]
                             goal_center = center
                             new_cluster[goal_center].append(data_point_index)
         print(new_cluster)
