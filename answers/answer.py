@@ -332,12 +332,8 @@ def first_iter(filename, k, seed):
     states=all_states.all_states
     random.seed(seed)
     centers =random.sample(states,k)
-    '''random.sample(range(len(states)),k)'''
-    print(centers)
     map_list = [[None for state in states] for state in states]
-    print(map_list)
     data_points_index = list(states)
-    print(data_points_index)
     for iteration in range(1):
         new_cluster = {center:[] for center in centers}
 
@@ -351,14 +347,13 @@ def first_iter(filename, k, seed):
                     index_id=data_points_index.index(data_point_index)
                     if map_list[center_id][index_id]==None:
                         map_list[center_id][index_id] = distance2(filename,states[index_id],states[center_id])
-                        print(map_list)
                         if min_value>map_list[center_id][index_id]:
                             min_value = map_list[center_id][index_id]
                             goal_center = center
                             new_cluster[goal_center].append(data_point_index)
         print(new_cluster)
 
-    return {}
+    return new_cluster
 
 
 def kmeans(filename, k, seed):
