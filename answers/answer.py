@@ -346,7 +346,7 @@ def first_iter(filename, k, seed):
                 index=data_point_center_distance.index(min(data_point_center_distance))
             iter_dict[data_point_index]=index
             
-      v = {}
+    v = {}
 
     for key, value in sorted(d.items()):
     v.setdefault(value, []).append(key)
