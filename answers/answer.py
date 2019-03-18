@@ -318,15 +318,15 @@ def first_iter(filename, k, seed):
 
     Test: tests/test_first_iter.py
     '''
-    map_list = []
+    '''map_list = []'''
     states=sorted(all_states.all_states)
     random.seed(seed)
     centers =random.sample(states,k)
-    map_list = [[None for i in states] for i in states]
+    '''map_list = [[None for i in states] for i in states]'''
     data_points_index = list(states)
     iter_dict={}
     for iteration in range(1):
-        new_cluster = {center:[] for center in centers}
+        '''new_cluster = {center:[] for center in centers}'''
         for data_point_index in data_points_index:
             '''if data_point_index not in centers:'''
             min_value = float('inf')
@@ -341,7 +341,7 @@ def first_iter(filename, k, seed):
                 data_point_center_distance.append(calculated_distance)
                 print(data_point_index,data_point_center_distance)
                 index=data_point_center_distance.index(min(data_point_center_distance))
-            iter_dict[data_point_index]=index
+            iter_dict[data_point_index]=centers[index]
             
     v = {}
 
