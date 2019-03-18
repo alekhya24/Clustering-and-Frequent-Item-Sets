@@ -321,9 +321,9 @@ def first_iter(filename, k, seed):
     '''map_list = []'''
     states_fi=sorted(states)
     random.seed(seed)
-    centers =random.sample(states_fi,k)
+    centers =random.sample(states,k)
     '''map_list = [[None for i in states] for i in states]'''
-    data_points_index = list(states)
+    data_points_index = list(states_fi)
     iter_dict={}
     for iteration in range(1):
         '''new_cluster = {center:[] for center in centers}'''
