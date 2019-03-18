@@ -349,15 +349,15 @@ def first_iter(filename, k, seed):
     v = {}
 
     for key, value in sorted(d.items()):
-    v.setdefault(value, []).append(key)
+        v.setdefault(value, []).append(key)
     '''if map_list[center_id][index_id]==None:
                     
     if min_value>map_list[center_id][index_id]:
         min_value = map_list[center_id][index_id]
         goal_center = center
         new_cluster[goal_center].append(data_point_index)'''
-        print(iter_dict)
-        print(v)
+    print(iter_dict)
+    print(v)
 
     return v
 
