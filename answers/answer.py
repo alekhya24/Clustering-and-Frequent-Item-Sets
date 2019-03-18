@@ -244,7 +244,6 @@ def data_preparation(filename, plant, state):
     data_f = spark.createDataFrame(rdd)
     data_f.cache()
     dict_op=getFromDict(state)
-    '''dict_op = data_f.select(data_f._2).where(data_f._1==state).collect()'''
     row = Row(**dict_op[0][0])
     if  plant in row.asDict().keys() and row.asDict()[plant]==1:
         return True
@@ -340,7 +339,7 @@ def first_iter(filename, k, seed):
                 '''distance = distance2(filename,states[index_id],states[center_id])'''
                 calculated_distance = distance2(filename,data_point_index,center)
                 data_point_center_distance.append(calculated_distance)
-                print(data_point_index,calculated_distance)
+                print(data_point_index,data_point_center_distance)
                 index=data_point_center_distance.index(min(data_point_center_distance))
             iter_dict[data_point_index]=index
             
@@ -354,7 +353,8 @@ def first_iter(filename, k, seed):
         min_value = map_list[center_id][index_id]
         goal_center = center
         new_cluster[goal_center].append(data_point_index)'''
-
+    print(iter_dict)
+    print(v)
     return v
 
 
