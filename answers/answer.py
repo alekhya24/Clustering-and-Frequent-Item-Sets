@@ -247,7 +247,6 @@ def data_preparation(filename, plant, state):
     '''dict_op = data_f.select(data_f._2).where(data_f._1==state).collect()'''
     row = Row(**dict_op[0][0])
     if  plant in row.asDict().keys() and row.asDict()[plant]==1:
-        print(row.asDict()[plant])
         return True
     else:
         return False
@@ -280,7 +279,6 @@ def distance2(filename, state1, state2):
     dict_op2=getFromDict(state2)
     list1=list(dict_op1[0][0].values())
     list2=list(dict_op2[0][0].values())
-    print(list1)
     points = zip(list1, list2)
     diffs_squared_distance = [pow(a - b, 2) for (a, b) in points]
     return sum(diffs_squared_distance)
@@ -306,7 +304,6 @@ def init_centroids(k, seed):
     '''
     random.seed(seed)
     random_states = random.sample(all_states.all_states,k)
-    print(random_states)
     return random_states
 
 def first_iter(filename, k, seed):
@@ -343,6 +340,7 @@ def first_iter(filename, k, seed):
                 '''distance = distance2(filename,states[index_id],states[center_id])'''
                 calculated_distance = distance2(filename,data_point_index,center)
                 data_point_center_distance.append(calculated_distance)
+                print(data_point_index,calculated_distance)
                 index=data_point_center_distance.index(min(data_point_center_distance))
             iter_dict[data_point_index]=index
             
@@ -356,8 +354,6 @@ def first_iter(filename, k, seed):
         min_value = map_list[center_id][index_id]
         goal_center = center
         new_cluster[goal_center].append(data_point_index)'''
-    print(iter_dict)
-    print(v)
 
     return v
 
