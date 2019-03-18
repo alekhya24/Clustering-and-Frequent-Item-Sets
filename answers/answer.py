@@ -323,7 +323,7 @@ def first_iter(filename, k, seed):
     Test: tests/test_first_iter.py
     '''
     map_list = []
-    states=all_states.all_states
+    states=sorted(all_states.all_states)
     random.seed(seed)
     centers =random.sample(states,k)
     map_list = [[None for i in states] for i in states]
@@ -343,7 +343,7 @@ def first_iter(filename, k, seed):
                         if min_value>map_list[center_id][index_id]:
                             min_value = map_list[center_id][index_id]
                             goal_center = center
-                            sorted(new_cluster[goal_center].append(sorted(data_point_index)))
+                            new_cluster[goal_center].append(data_point_index)
         print(new_cluster)
 
     return new_cluster
@@ -362,7 +362,7 @@ def kmeans(filename, k, seed):
     
     Return value: a list of lists where each sub-list contains all states (alphabetically sorted) of one class.
                   Example: [["qc", "on"], ["az", "ca"]] has two 
-                  classes: the first one contains the states "qc" and 
+                   classes: the first one contains the states "qc" and 
                   "on", and the second one contains the states "az" 
                   and "ca".
     Test file: tests/test_kmeans.py
