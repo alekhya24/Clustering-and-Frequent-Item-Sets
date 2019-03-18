@@ -328,25 +328,38 @@ def first_iter(filename, k, seed):
     centers =random.sample(states,k)
     map_list = [[None for i in states] for i in states]
     data_points_index = list(states)
+    iter_dict={}
     for iteration in range(1):
-        new_cluster = {center:[center] for center in centers}
+        new_cluster = {center:[] for center in centers}
         for data_point_index in data_points_index:
-            if data_point_index not in centers:
-                min_value = float('inf')
-                min_goal = None
-                min_data_point = None
-                for center in centers:
-                    center_id=data_points_index.index(center)
-                    index_id=data_points_index.index(data_point_index)
-                    if map_list[center_id][index_id]==None:
-                        map_list[center_id][index_id] = distance2(filename,states[index_id],states[center_id])
-                        if min_value>map_list[center_id][index_id]:
-                            min_value = map_list[center_id][index_id]
-                            goal_center = center
-                            new_cluster[goal_center].append(data_point_index)
-        print(new_cluster)
+            '''if data_point_index not in centers:'''
+            min_value = float('inf')
+            min_goal = None
+            min_data_point = None
+            data_point_center_distance=[]
+            for center in centers:
+                '''center_id=data_points_index.index(center)
+                index_id=data_points_index.index(data_point_index)'''
+                '''distance = distance2(filename,states[index_id],states[center_id])'''
+                calculated_distance = distance2(filename,data_point_index,center)
+                data_point_center_distance.append(calculated_distance)
+                index=data_point_center_distance.index(min(data_point_center_distance))
+            iter_dict[data_point_index]=index
+            
+      v = {}
 
-    return new_cluster
+    for key, value in sorted(d.items()):
+    v.setdefault(value, []).append(key)
+    '''if map_list[center_id][index_id]==None:
+                    
+    if min_value>map_list[center_id][index_id]:
+        min_value = map_list[center_id][index_id]
+        goal_center = center
+        new_cluster[goal_center].append(data_point_index)'''
+        print(iter_dict)
+        print(v)
+
+    return v
 
 
 def kmeans(filename, k, seed):
