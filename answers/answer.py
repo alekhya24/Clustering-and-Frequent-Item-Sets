@@ -348,7 +348,7 @@ def first_iter(filename, k, seed):
             
     v = {}
 
-    for key, value in sorted(d.items()):
+    for key, value in sorted(iter_dict.items()):
         v.setdefault(value, []).append(key)
     '''if map_list[center_id][index_id]==None:
                     
