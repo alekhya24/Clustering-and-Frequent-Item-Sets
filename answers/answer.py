@@ -319,9 +319,9 @@ def first_iter(filename, k, seed):
     Test: tests/test_first_iter.py
     '''
     '''map_list = []'''
-    states=sorted(all_states.all_states)
+    states_fi=sorted(states)
     random.seed(seed)
-    centers =random.sample(states,k)
+    centers =random.sample(states_fi,k)
     '''map_list = [[None for i in states] for i in states]'''
     data_points_index = list(states)
     iter_dict={}
@@ -339,7 +339,6 @@ def first_iter(filename, k, seed):
                 '''distance = distance2(filename,states[index_id],states[center_id])'''
                 calculated_distance = distance2(filename,data_point_index,center)
                 data_point_center_distance.append(calculated_distance)
-                print(data_point_index,data_point_center_distance)
                 index=data_point_center_distance.index(min(data_point_center_distance))
             iter_dict[data_point_index]=centers[index]
             
