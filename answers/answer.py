@@ -324,11 +324,11 @@ def first_iter(filename, k, seed):
     random.seed(seed)
     centers =random.sample(states,k)
     data_points_index = list(states_fi)
-    v = assign_states(centers)
+    v = assign_states(filename,centers)
     return v            
     
 
-def assign_states(centers):
+def assign_states(filename,centers):
     iter_dict={}
     for iteration in range(1):
         for data_point_index in data_points_index:
@@ -370,7 +370,7 @@ def kmeans(filename, k, seed):
     states_fi=sorted(states)
     random.seed(seed)
     centroids =random.sample(states,k)
-    first_iter_centroids=assign_states(centroids)
+    first_iter_centroids=assign_states(filename,centroids)
     while True:
         for k,v in first_iter_centroids.items():
             for value in v:
