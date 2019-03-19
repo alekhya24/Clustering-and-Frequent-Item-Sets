@@ -374,7 +374,7 @@ def kmeans(filename, k, seed):
     while True:
         for k,v in first_iter_centroids.items():
             for value in v:
-            update_centroids = nearest_centroid(value,centroids)
+                update_centroids = nearest_centroid(value,centroids)
     return []
 
 
