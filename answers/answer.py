@@ -324,7 +324,7 @@ def first_iter(filename, k, seed):
     random.seed(seed)
     centers =random.sample(states,k)
     data_points_index = list(states_fi)
-    v = assign_states(centers))
+    v = assign_states(centers)
     return v            
     
 
