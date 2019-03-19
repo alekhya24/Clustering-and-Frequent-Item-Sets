@@ -24,6 +24,7 @@ all_plants=None
 data_f=None
 data_df=None
 data_points_index=None
+MAX_FLOAT_VALUE = sys.float_info.max
 '''
 INTRODUCTION
 
@@ -387,4 +388,4 @@ def nearest_centroid(value,centroids):
             closest_distance = point_distance
             closest_centroid = i
     print(value,centroid,closest_centroid,closest_distance)
-    return closest_centroid,
+    return closest_centroid
