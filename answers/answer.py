@@ -375,15 +375,15 @@ def kmeans(filename, k, seed):
     while True:
         for k,v in first_iter_centroids.items():
             for value in v:
-                update_centroids = nearest_centroid(value,centroids)
+                update_centroids = nearest_centroid(filename,value,centroids)
     return []
 
 
-def nearest_centroid(value,centroids):
+def nearest_centroid2(filename,value,centroids):
     closest_centroid = None
     closest_distance = MAX_FLOAT_VALUE
     for centroid in centroids:
-        point_distance = distance(centroid, value)
+        point_distance = distance2(filename,centroid, value)
         if point_distance < closest_distance:
             closest_distance = point_distance
             closest_centroid = i
