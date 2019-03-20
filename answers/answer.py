@@ -373,11 +373,11 @@ def kmeans(filename, k, seed):
     centroids =random.sample(states,k)
     iter_dict={}
     first_iter_centroids=assign_states(filename,centroids)
-    while True:
-        for k,v in first_iter_centroids.items():
-            for value in v:
-                update_centroids = nearest_centroid(filename,value,centroids)
-                iter_dict[update_centroids]=first_iter_centroids[k]
+    '''while True:'''
+    for k,v in first_iter_centroids.items():
+        for value in v:
+            update_centroids = nearest_centroid(filename,value,centroids)
+            iter_dict[update_centroids]=first_iter_centroids[k]
     print(iter_dict)
     return []
 
