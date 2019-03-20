@@ -386,6 +386,6 @@ def nearest_centroid(filename,value,centroids):
         point_distance = distance2(filename,centroid, value)
         if point_distance < closest_distance:
             closest_distance = point_distance
-            closest_centroid = i
+            closest_centroid = centroid
     print(value,centroid,closest_centroid,closest_distance)
     return closest_centroid
