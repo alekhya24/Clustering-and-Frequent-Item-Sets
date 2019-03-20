@@ -377,7 +377,7 @@ def kmeans(filename, k, seed):
     old_clusters = assign_states(centroids)
     print(old_clusters)
     new_clusters = recalculate_cluster_centroids(old_clusters)
-    print(new_clusters)
+    print(new_clusters.collectAsMap())
     '''new_cluster_keys = new_clusters.keys().collect()'''
     if(new_clusters==None):
         return []
