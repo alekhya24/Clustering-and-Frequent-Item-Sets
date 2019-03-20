@@ -371,21 +371,28 @@ def kmeans(filename, k, seed):
     states_fi=sorted(states)
     random.seed(seed)
     centroids =random.sample(states,k)
+    iter_dict={}
     first_iter_centroids=assign_states(filename,centroids)
     while True:
         for k,v in first_iter_centroids.items():
             for value in v:
                 update_centroids = nearest_centroid(filename,value,centroids)
+                iter_dict[update_centroids]=first_iter_centroids[k]
+    print(iter_dict)
     return []
 
 
 def nearest_centroid(filename,value,centroids):
     closest_centroid = None
-    closest_distance = MAX_FLOAT_VALUE
+    closest_distance = float('inf')
+    data_point_center_distance=[]
     for centroid in centroids:
-        point_distance = distance2(filename,centroid, value)
-        if point_distance < closest_distance:
+        '''if point_distance < closest_distance:
             closest_distance = point_distance
-            closest_centroid = centroid
-    print(value,centroid,closest_centroid,closest_distance)
+            closest_centroid = centroid'''
+        point_distance = distance2(filename,value,centroid)
+        data_point_center_distance.append(point_distance)
+        index=data_point_center_distance.index(min(data_point_center_distance))
+    '''iter_dict[data_point_index]=centroids[index]'''
+    closest_centroid=centroids[index]
     return closest_centroid
