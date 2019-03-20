@@ -387,9 +387,9 @@ def kmeans(filename, k, seed):
     return []
 
 def recalculate_cluster_centroids(clusters):
-    return clusters.values().map(lambda points: (assign_states(points))
+    return clusters.values().map(lambda points: (assign_states(points)))
 
-def nearest_centroid(values,centers):
+'''def nearest_centroid(values,centers):
     iter_dict={}
     for iteration in range(1):
         for value in values:
@@ -407,7 +407,7 @@ def nearest_centroid(values,centers):
 
     for key, value in sorted(iter_dict.items()):
         v.setdefault(value, []).append(key)
-    return v,value
+    return v,value'''
 
 
 '''def nearest_centroid(value,centroids):
