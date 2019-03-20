@@ -417,10 +417,10 @@ def nearest_centroid(values,centers):
     for centroid in centroids:
         if point_distance < closest_distance:
             closest_distance = point_distance
-            closest_centroid = centroid'''
+            closest_centroid = centroid
         point_distance = distance2("file",value,centroid)
         data_point_center_distance.append(point_distance)
         index=data_point_center_distance.index(min(data_point_center_distance))
-    '''iter_dict[data_point_index]=centroids[index]
+    iter_dict[data_point_index]=centroids[index]
     closest_centroid=centroids[index]
     return closest_centroid'''
