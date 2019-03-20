@@ -378,11 +378,11 @@ def kmeans(filename, k, seed):
     print(old_clusters)
     new_clusters = recalculate_cluster_centroids(old_clusters)
     print(new_clusters)
-        '''new_cluster_keys = new_clusters.keys().collect()'''
+    '''new_cluster_keys = new_clusters.keys().collect()'''
     if(new_clusters==None):
         return []
-        '''if first_iter_centroids.keys().collect() == new_clusters.keys().collect():
-            return best_clusters'''
+    '''if first_iter_centroids.keys().collect() == new_clusters.keys().collect():
+        return best_clusters'''
             
     print(new_clusters)
     return []
