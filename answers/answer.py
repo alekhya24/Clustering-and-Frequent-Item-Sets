@@ -379,7 +379,7 @@ def kmeans(filename, k, seed):
     return []
 
 
-def nearest_centroid2(filename,value,centroids):
+def nearest_centroid(filename,value,centroids):
     closest_centroid = None
     closest_distance = MAX_FLOAT_VALUE
     for centroid in centroids:
