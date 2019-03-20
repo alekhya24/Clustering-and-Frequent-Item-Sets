@@ -375,11 +375,11 @@ def kmeans(filename, k, seed):
     print(first_iter_centroids)
     while True:
         for k,v in first_iter_centroids.items():
-        '''for value in v:'''
+            '''for value in v:'''
             old_centroid=k
             update_centroids,key = nearest_centroid(v,centroids)
-        '''iter_dict[update_centroids]=first_iter_centroids[k]
-        first_iter_centroids'''
+            '''iter_dict[update_centroids]=first_iter_centroids[k]
+            first_iter_centroids'''
             if(k==key):
                 print("key matches")
             else:
@@ -415,12 +415,12 @@ def nearest_centroid(values,centers):
     closest_distance = float('inf')
     data_point_center_distance=[]
     for centroid in centroids:
-        '''if point_distance < closest_distance:
+        if point_distance < closest_distance:
             closest_distance = point_distance
             closest_centroid = centroid'''
         point_distance = distance2("file",value,centroid)
         data_point_center_distance.append(point_distance)
         index=data_point_center_distance.index(min(data_point_center_distance))
-    '''iter_dict[data_point_index]=centroids[index]'''
+    '''iter_dict[data_point_index]=centroids[index]
     closest_centroid=centroids[index]
     return closest_centroid'''
