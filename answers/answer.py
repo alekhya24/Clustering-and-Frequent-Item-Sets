@@ -380,8 +380,8 @@ def kmeans(filename, k, seed):
         print(new_clusters)
         new_cluster_keys = new_clusters.keys().collect()
 
-            if first_iter_centroids.keys().collect() == new_clusters.keys().collect():
-                return best_clusters
+        if first_iter_centroids.keys().collect() == new_clusters.keys().collect():
+            return best_clusters
             
     print(best_clusters)
     return []
