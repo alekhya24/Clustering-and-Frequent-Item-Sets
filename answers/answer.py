@@ -325,11 +325,11 @@ def first_iter(filename, k, seed):
     random.seed(seed)
     centers =random.sample(states,k)
     data_points_index = list(states_fi)
-    v = assign_states(filename,centers)
+    v = assign_states(centers)
     return v            
     
 
-def assign_states(filename,centers):
+def assign_states(centers):
     iter_dict={}
     for iteration in range(1):
         for data_point_index in data_points_index:
@@ -338,7 +338,7 @@ def assign_states(filename,centers):
             min_data_point = None
             data_point_center_distance=[]
             for center in centers:
-                calculated_distance = distance2(filename,data_point_index,center)
+                calculated_distance = distance2("name",data_point_index,center)
                 data_point_center_distance.append(calculated_distance)
                 index=data_point_center_distance.index(min(data_point_center_distance))
             iter_dict[data_point_index]=centers[index]
@@ -371,23 +371,23 @@ def kmeans(filename, k, seed):
     states_fi=sorted(states)
     random.seed(seed)
     centroids =random.sample(states,k)
-    first_iter_centroids=assign_states(filename,centroids)
+    first_iter_centroids=assign_states(centroids)
     print(first_iter_centroids)
     while True:
-        for k,v in first_iter_centroids.items():
-            '''for value in v:'''
-            old_centroid=k
-            update_centroids,key = nearest_centroid(v,centroids)
-            '''iter_dict[update_centroids]=first_iter_centroids[k]
-            first_iter_centroids'''
-            if(k==key):
-                print("key matches")
-            else:
-                print("key not matches")
-                break
+        old_clusters = assign_states(centroids)
+
+        new_clusters = recalculate_cluster_centroids(old_clusters)
+        print(new_clusters)
+        new_cluster_keys = new_clusters.keys().collect()
+
+            if first_iter_centroids.keys().collect() == new_clusters.keys().collect():
+                return best_clusters
             
-    print(update_centroids)
+    print(best_clusters)
     return []
+
+def recalculate_cluster_centroids(clusters):
+    return clusters.values().map(lambda points: (assign_states(points))
 
 def nearest_centroid(values,centers):
     iter_dict={}
