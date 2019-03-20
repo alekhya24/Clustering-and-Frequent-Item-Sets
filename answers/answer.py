@@ -373,14 +373,14 @@ def kmeans(filename, k, seed):
     centroids =random.sample(states,k)
     first_iter_centroids=assign_states(centroids)
     print(first_iter_centroids)
-    while True:
-        old_clusters = assign_states(centroids)
-
-        new_clusters = recalculate_cluster_centroids(old_clusters)
-        print(new_clusters)
+    '''while True:'''
+    old_clusters = assign_states(centroids)
+    print(old_clusters)
+    new_clusters = recalculate_cluster_centroids(old_clusters)
+    print(new_clusters)
         '''new_cluster_keys = new_clusters.keys().collect()'''
-        if(new_clusters==None):
-            return []
+    if(new_clusters==None):
+        return []
         '''if first_iter_centroids.keys().collect() == new_clusters.keys().collect():
             return best_clusters'''
             
@@ -412,19 +412,3 @@ def recalculate_cluster_centroids(clusters):
     for key, value in sorted(iter_dict.items()):
         v.setdefault(value, []).append(key)
     return v,value'''
-
-
-'''def nearest_centroid(value,centroids):
-    closest_centroid = None
-    closest_distance = float('inf')
-    data_point_center_distance=[]
-    for centroid in centroids:
-        if point_distance < closest_distance:
-            closest_distance = point_distance
-            closest_centroid = centroid
-        point_distance = distance2("file",value,centroid)
-        data_point_center_distance.append(point_distance)
-        index=data_point_center_distance.index(min(data_point_center_distance))
-    iter_dict[data_point_index]=centroids[index]
-    closest_centroid=centroids[index]
-    return closest_centroid'''
