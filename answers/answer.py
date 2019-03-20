@@ -377,18 +377,21 @@ def kmeans(filename, k, seed):
         old_clusters = assign_states(centroids)
 
         new_clusters = recalculate_cluster_centroids(old_clusters)
-        print(new_clusters)
-        new_cluster_keys = new_clusters.keys().collect()
-
-        if first_iter_centroids.keys().collect() == new_clusters.keys().collect():
-            return best_clusters
+        '''print(new_clusters)
+        new_cluster_keys = new_clusters.keys().collect()'''
+        if(new_clusters==None)
+            return []
+        '''if first_iter_centroids.keys().collect() == new_clusters.keys().collect():
+            return best_clusters'''
             
-    print(best_clusters)
+    print(new_clusters)
     return []
 
 def recalculate_cluster_centroids(clusters):
     rdd_clusters=sc.parallelize(clusters)
-    return rdd_clusters.values().map(lambda points: (assign_states(points)))
+    op=rdd_clusters.values().map(lambda points: (assign_states(points)))
+    print(op)
+    return op
 
 '''def nearest_centroid(values,centers):
     iter_dict={}
