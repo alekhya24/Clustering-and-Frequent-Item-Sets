@@ -371,18 +371,46 @@ def kmeans(filename, k, seed):
     states_fi=sorted(states)
     random.seed(seed)
     centroids =random.sample(states,k)
-    iter_dict={}
     first_iter_centroids=assign_states(filename,centroids)
-    '''while True:'''
-    for k,v in first_iter_centroids.items():
-        for value in v:
-            update_centroids = nearest_centroid(filename,value,centroids)
-            iter_dict[update_centroids]=first_iter_centroids[k]
-    print(iter_dict)
+    print(first_iter_centroids)
+    while True:
+        for k,v in first_iter_centroids.items():
+        '''for value in v:'''
+            old_centroid=k
+            update_centroids,key = nearest_centroid(v,centroids)
+        '''iter_dict[update_centroids]=first_iter_centroids[k]
+        first_iter_centroids'''
+            if(k==key):
+                print("key matches")
+            else:
+                print("key not matches")
+                break
+            
+    print(update_centroids)
     return []
 
+def nearest_centroid(values,centers):
+    iter_dict={}
+    for iteration in range(1):
+        for value in values:
+            min_value = float('inf')
+            min_goal = None
+            min_data_point = None
+            data_point_center_distance=[]
+            for center in centers:
+                calculated_distance = distance2("name",value,center)
+                data_point_center_distance.append(calculated_distance)
+                index=data_point_center_distance.index(min(data_point_center_distance))
+            iter_dict[value]=centers[index]
+    
+    v = {}
 
-def nearest_centroid(filename,value,centroids):
+    for key, value in sorted(iter_dict.items()):
+        v.setdefault(value, []).append(key)
+    return v,value
+
+
+'''def nearest_centroid(value,centroids):
     closest_centroid = None
     closest_distance = float('inf')
     data_point_center_distance=[]
@@ -390,9 +418,9 @@ def nearest_centroid(filename,value,centroids):
         '''if point_distance < closest_distance:
             closest_distance = point_distance
             closest_centroid = centroid'''
-        point_distance = distance2(filename,value,centroid)
+        point_distance = distance2("file",value,centroid)
         data_point_center_distance.append(point_distance)
         index=data_point_center_distance.index(min(data_point_center_distance))
     '''iter_dict[data_point_index]=centroids[index]'''
     closest_centroid=centroids[index]
-    return closest_centroid
+    return closest_centroid'''
