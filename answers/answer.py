@@ -367,24 +367,24 @@ def kmeans(filename, k, seed):
                   and "ca".
     Test file: tests/test_kmeans.py
     '''
-    spark = init_spark()
+    '''spark = init_spark()
     states_fi=sorted(states)
     random.seed(seed)
     centroids =random.sample(states,k)
     first_iter_centroids=assign_states(centroids)
     print(first_iter_centroids)
-    '''while True:'''
+    while True:
     old_clusters = assign_states(centroids)
     print(old_clusters)
     new_clusters = recalculate_cluster_centroids(old_clusters)
     print(new_clusters.collectAsMap())
-    '''new_cluster_keys = new_clusters.keys().collect()'''
+    new_cluster_keys = new_clusters.keys().collect()
     if(new_clusters==None):
         return []
-    '''if first_iter_centroids.keys().collect() == new_clusters.keys().collect():
-        return best_clusters'''
+    if first_iter_centroids.keys().collect() == new_clusters.keys().collect():
+        return best_clusters
             
-    print(new_clusters)
+    print(new_clusters)'''
     return []
 
 def recalculate_cluster_centroids(clusters):
